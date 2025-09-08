@@ -9,13 +9,13 @@ const ResetPassword = () => {
       <PrimaryTitle>Réinitialiser mot de passe</PrimaryTitle>
 
       <form className="w-90">
-        <div className="card-border relative"><span className="absolute w-6 top-19.5 left-9">{<EnvelopeIcon />}</span>
+        <div className="card-border relative">
           <Input
             id="email"
             type="email"
             placeholder="Veuillez rentrer votre email"
             label="Email"
-            icon=""
+            icon={<EnvelopeIcon width={20} />}
           />
         </div>
         <PrimaryButton customClass="mt-20">Envoyer</PrimaryButton>
