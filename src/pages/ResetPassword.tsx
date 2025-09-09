@@ -8,7 +8,7 @@ const ResetPassword = () => {
     <>
       <PrimaryTitle>Réinitialiser mot de passe</PrimaryTitle>
 
-      <form className="flex flex-col max-h-96 max-w-96 w-full px-5 gap-20">
+      <form className="form">
         <div className="card-border relative">
           <Input
             id="email"
