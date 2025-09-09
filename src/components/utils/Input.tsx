@@ -18,6 +18,7 @@ const Input = ({ id, type, placeholder, label, errors, customClass, icon }: Inpu
         {label}
       </label>
       <input
+      
         id={id}
         type={type}
         placeholder={placeholder}
