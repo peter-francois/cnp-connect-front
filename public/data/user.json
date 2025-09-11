@@ -296,7 +296,7 @@
     "isAvailable": true,
     "isActif": true,
     "role": "conductor",
-    "lignesId": [ 1 , 2  ],
+    "lignesId": null,
     "trainsId": 115
   },
   {

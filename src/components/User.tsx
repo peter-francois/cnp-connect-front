@@ -12,15 +12,15 @@ interface UserPropsInterface {
 }
 
 const User = ({ userData }: UserPropsInterface) => {
-  const [hoveredUserId, setHoveredUserId] = useState<number | null>(null);
+  const [currentUser, setCurrentUser] = useState<number | null>(null);
 
   return (
     <>
       <li
-        className={`flex items-center justify-between gap-4 py-2 px-7 relative ${
-          hoveredUserId == userData.id ? "bg-indigo-300" : "hover:bg-indigo-300"
+        className={`flex items-center justify-between gap-4 py-2 px-7 relative cursor-pointer ${
+          currentUser == userData.id ? "bg-indigo-300" : "hover:bg-indigo-300 "
         } `}
-        onClick={() => setHoveredUserId(userData.id)}
+        onClick={() => setCurrentUser(userData.id)}
       >
         <div className="flex items-center gap-4">
           <img className="rounded-full w-10" src={userData.avatar_url} alt={userData.lastName} />
@@ -30,9 +30,9 @@ const User = ({ userData }: UserPropsInterface) => {
         </div>
 
         <span>{userData.role}</span>
-        {hoveredUserId == userData.id && (
+        {currentUser == userData.id && (
           <div className=" absolute border rounded w-full bg-indigo-600  top-11 left-0 z-20 p-3 flex justify-between">
-            <CloseButton onClose={() => setHoveredUserId(null)} />
+            <CloseButton onClose={() => setCurrentUser(null)} />
             <StatusIsConnect status={userData.isConnected} />
             <UserLign lignesId={userData.lignesId} />
             <UserTrain train={userData.trainsId} />
