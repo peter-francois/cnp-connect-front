@@ -9,7 +9,9 @@ const Header = () => {
         <Bars3Icon width={38} />
       </nav>
 
-      <PrimaryButton customClass="w-24 h-10 center">Alerte</PrimaryButton>
+      <PrimaryButton type="button" customClass="w-24 h-10 center">
+        Alerte
+      </PrimaryButton>
 
       <ul className="center gap-2.5">
         <AlertsIem notificationNumber={5} customClass="bg-green-600" />
