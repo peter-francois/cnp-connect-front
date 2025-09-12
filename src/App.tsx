@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import DisconnectedLayout from "./layouts/DisconnectedLayout";
 import ChangePassword from "./pages/ChangePassword.page.";
 import ResetPassword from "./pages/ResetPassword";
+import Users from "./pages/Users";
 import ConnectionPage from "./pages/Connection.page";
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
         <Route path="nouveau-mot-de-passe" element={<ChangePassword />} />
         <Route path="reinitialisation-mot-passe" element={<ResetPassword />} />
       </Route>
+      <Route path="/utilisateurs" element={<Users />} />
     </Routes>
     < ReactQueryDevtools />
     </>
