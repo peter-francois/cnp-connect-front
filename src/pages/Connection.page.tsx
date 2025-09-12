@@ -7,6 +7,8 @@ import { useForm } from "react-hook-form";
 import PopUp from "../components/utils/PopUp";
 import { Connection } from "../api/auth";
 import { useState } from "react";
+import { schema } from "../types/connection.formData";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export interface ConnectionInterface {
   email: string;
@@ -18,8 +20,7 @@ const ConnectionPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
-  } = useForm<ConnectionInterface>();
+  } = useForm<ConnectionInterface>({ resolver: zodResolver(schema) });
   const navigate = useNavigate();
 
   const sendDataToBack = async (data: ConnectionInterface): Promise<void> => {
@@ -30,7 +31,6 @@ const ConnectionPage = () => {
       navigate("/utilisateurs");
     } else {
       setIsSucess(false);
-      console.log("not good conbinaison");
     }
   };
 
@@ -45,8 +45,8 @@ const ConnectionPage = () => {
             label="Email"
             placeholder="Adresse email"
             customClass="mt-0 mb-10"
-            useFormRegister={register}
-            error={errors.email}
+            register={register}
+            errors={errors}
             icon={<EnvelopeIcon width={20} />}
           />
           <Input
@@ -55,14 +55,15 @@ const ConnectionPage = () => {
             label="Mot de passe"
             placeholder="Mot de passe"
             customClass="mt-0 mb-0"
-            useFormRegister={register}
-            error={errors.password}
+            register={register}
+            errors={errors}
             icon={<LockClosedIcon width={20} />}
           />
           <NavLink to="/" className="text-xs">
             Mot de passe oulié?{" "}
           </NavLink>
         </div>
+        {!isSucces && <PopUp>L'email et/ou le mot de passe est incorrect !</PopUp>}
         <PrimaryButton type="submit">Se connecter</PrimaryButton>
       </form>
     </>
@@ -70,3 +71,5 @@ const ConnectionPage = () => {
 };
 
 export default ConnectionPage;
+
+// faire le connection.formdata.ts
