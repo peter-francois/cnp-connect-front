@@ -57,7 +57,7 @@ const ResetPassword = () => {
         </div>
         {isValided && (
           <PopUp customClass="flex-col">
-            <p className="w-full">Merci {user.firstName} !</p> 
+            <p className="w-full">Merci {user.firstName} !</p>
             <p className="w-full">Tu vas recevoir un email afin que tu puisse changer ton mot de passe.</p>
           </PopUp>
         )}
