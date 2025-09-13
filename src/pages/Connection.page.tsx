@@ -1,14 +1,51 @@
 import PrimaryTitle from "../components/utils/PrimaryTitle";
 import Input from "../components/utils/Input";
 import PrimaryButton from "../components/utils/PrimaryButton";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { LockClosedIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
+import { useForm } from "react-hook-form";
+import PopUp from "../components/utils/PopUp";
+import { Connection } from "../api/auth";
+import { schema } from "../types/connection.formData";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+
+export interface ConnectionInterface {
+  email: string;
+  password: string;
+}
 
 const ConnectionPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ConnectionInterface>({ resolver: zodResolver(schema) });
+
+  const { isError, isPending, mutate } = useMutation({
+    mutationFn: ({ email, password }: ConnectionInterface) => Connection(email, password),
+    onSuccess: (data) => {
+      if (data.status && data.authtoken) {
+        localStorage.setItem("token", data.authtoken);
+        navigate("/utilisateurs");
+      }
+    },
+    onError: (data) => {
+      console.log(data.message);
+    },
+  });
+  const navigate = useNavigate();
+
+  const sendDataToBack = (data: ConnectionInterface): void => {
+    const email = data.email;
+    const password = data.password;
+    mutate({ email, password });
+  };
+
   return (
     <>
       <PrimaryTitle>Connexion</PrimaryTitle>
-      <form className="flex flex-col max-h-96 max-w-96 w-full px-5 gap-20">
+      <form onSubmit={handleSubmit(sendDataToBack)} className="form">
         <div className="card-border ">
           <Input
             id="email"
@@ -16,6 +53,8 @@ const ConnectionPage = () => {
             label="Email"
             placeholder="Adresse email"
             customClass="mt-0 mb-10"
+            register={register}
+            errors={errors}
             icon={<EnvelopeIcon width={20} />}
           />
           <Input
@@ -24,13 +63,17 @@ const ConnectionPage = () => {
             label="Mot de passe"
             placeholder="Mot de passe"
             customClass="mt-0 mb-0"
+            register={register}
+            errors={errors}
             icon={<LockClosedIcon width={20} />}
           />
           <NavLink to="/" className="text-xs">
             Mot de passe oulié?{" "}
           </NavLink>
         </div>
-        <PrimaryButton>Se connecter</PrimaryButton>
+        {isError && <PopUp>L'email et/ou le mot de passe est incorrect !</PopUp>}
+        <PrimaryButton type="submit">Se connecter</PrimaryButton>
+        {isPending && <span>Connection...</span>}
       </form>
     </>
   );
