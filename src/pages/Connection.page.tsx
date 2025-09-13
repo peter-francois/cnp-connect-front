@@ -6,32 +6,40 @@ import { LockClosedIcon, EnvelopeIcon } from "@heroicons/react/24/outline";
 import { useForm } from "react-hook-form";
 import PopUp from "../components/utils/PopUp";
 import { Connection } from "../api/auth";
-import { useState } from "react";
 import { schema } from "../types/connection.formData";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 
 export interface ConnectionInterface {
   email: string;
   password: string;
 }
+
 const ConnectionPage = () => {
-  const [isSucces, setIsSucess] = useState<boolean>(true);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<ConnectionInterface>({ resolver: zodResolver(schema) });
+
+  const { isError, isPending, mutate } = useMutation({
+    mutationFn: ({ email, password }: ConnectionInterface) => Connection(email, password),
+    onSuccess: (data) => {
+      if (data.status && data.authtoken) {
+        localStorage.setItem("token", data.authtoken);
+        navigate("/utilisateurs");
+      }
+    },
+    onError: (data) => {
+      console.log(data.message);
+    },
+  });
   const navigate = useNavigate();
 
-  const sendDataToBack = async (data: ConnectionInterface): Promise<void> => {
-    console.log(data);
-    const auth = await Connection(data.email, data.password);
-    if (auth.authtoken) {
-      setIsSucess(true);
-      navigate("/utilisateurs");
-    } else {
-      setIsSucess(false);
-    }
+  const sendDataToBack = (data: ConnectionInterface): void => {
+    const email = data.email;
+    const password = data.password;
+    mutate({ email, password });
   };
 
   return (
@@ -63,13 +71,12 @@ const ConnectionPage = () => {
             Mot de passe oulié?{" "}
           </NavLink>
         </div>
-        {!isSucces && <PopUp>L'email et/ou le mot de passe est incorrect !</PopUp>}
+        {isError && <PopUp>L'email et/ou le mot de passe est incorrect !</PopUp>}
         <PrimaryButton type="submit">Se connecter</PrimaryButton>
+        {isPending && <span>Connection...</span>}
       </form>
     </>
   );
 };
 
 export default ConnectionPage;
-
-// faire le connection.formdata.ts

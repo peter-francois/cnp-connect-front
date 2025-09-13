@@ -1,23 +1,17 @@
 import { getUsers } from "./user";
 
-interface ResponseInterface {
+interface LoginResponceInterface {
   status: boolean;
   message: string;
-  authtoken: boolean;
+  authtoken?: string;
+  user?: string;
 }
 
-export const Connection = async (email: string, password: string): Promise<ResponseInterface> => {
-  let token = false;
-  try {
-    const users = await getUsers();
-    const user = users.find((item) => item.email === email);
-    if (user && user.password == password) {
-      token = true;
-      return { status: true, message: `Connexion établie pour l'utilisateur ${user.email}`, authtoken: token };
-    }
-    return { status: false, message: "Connexion refusée", authtoken: token };
-  } catch (error) {
-    console.log(error);
-    return { status: false, message: `Connexion refusé`, authtoken: token };
+export const Connection = async (email: string, password: string): Promise<LoginResponceInterface> => {
+  const users = await getUsers();
+  const user = users.find((item) => item.email === email);
+  if (user && user.password == password) {
+    return { status: true, message: "Connexion établie", authtoken: "fake-token", user: user.lastName };
   }
+  return { status: false, message: "Connexion refusée" };
 };
