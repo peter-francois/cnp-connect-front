@@ -1,6 +1,5 @@
 import { Route, Routes } from "react-router";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import Home from "./pages/Home";
 import DisconnectedLayout from "./layouts/DisconnectedLayout";
 import ChangePassword from "./pages/ChangePassword";
 import ResetPassword from "./pages/ResetPassword";
