@@ -3,7 +3,7 @@ import { z } from "zod";
 export const schemaResetPassword = z
   .object({
     email: z
-      .email({ message: "L'email n'est pas valide" })
+      .email({ message: "Le format de l’adresse électronique est invalide." })
 
   })
 
