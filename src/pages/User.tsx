@@ -1,6 +1,8 @@
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import PrimaryButton from "../components/utils/PrimaryButton";
 import StatusIsConnect from "../components/user/StatusIsConnect";
+import { useEffect, useState } from "react";
+import { getUsersById } from "../api/user";
 
 // method => PATH
 // path => api/v1/users/:userId
@@ -15,12 +17,22 @@ import StatusIsConnect from "../components/user/StatusIsConnect";
 // Conducteur : peut voir la ligne et le train qui lui sont affectés.
 // Utilisateur connecté voir son profil et peut changer sa photo et son statut
 const User = () => {
+  const { id } = useParams();
+  const [user, setUser] = useState();
+  useEffect(() => {
+    const getData = async () => {
+      const user = await getUsersById(id);
+      console.log("Peter", user);
+    };
+    getData();
+  }, [id]);
+
   return (
     <div className="my-3  mx-auto">
       <section className="flex justify-around items-center gap-4 mb-4">
         <div>
           <img className="rounded-full" src="https://randomuser.me/api/portraits/women/1.jpg" alt="user lastName" />
-          <Link className="text-sm" to={"/"}>
+          <Link className="text-sm" to="/">
             Changer la photo
           </Link>
         </div>
@@ -30,6 +42,7 @@ const User = () => {
           <li>Embauché depuis le:</li>
         </ul>
       </section>
+
       <section>
         <ul>
           <li>Email: </li>
@@ -37,6 +50,7 @@ const User = () => {
           <li>Affectation: </li>
         </ul>
       </section>
+
       <div className="flex flex-col gap-4 my-4 max-w-52 mx-auto">
         <PrimaryButton type="button">Lignes</PrimaryButton>
         <PrimaryButton type="button">Trains</PrimaryButton>
