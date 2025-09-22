@@ -19,7 +19,7 @@ const App = () => {
         </Route>
         <Route element={<ConnectedLayout />}>
           <Route path="/utilisateurs" element={<Users />} />
-          <Route path="/profil" element={<User />} />
+          <Route path="/utilisateurs/:id" element={<User />} />
         </Route>
       </Routes>
       <ReactQueryDevtools />
