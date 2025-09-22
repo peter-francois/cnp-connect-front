@@ -12,7 +12,7 @@ const ItemLink = ({ link, children }: LinkComponentInterface) => {
     <NavLink
       to={link.path}
       className={({ isActive }) =>
-        `bg-indigo-600 px-4 py-2.5 rounded-2xl hover:bg-indigo-900 ${isActive ? "hidden " : "visible"}`
+        `text-indigo-50 px-4 py-2.5 rounded-2xl hover:text-indigo-500 ${isActive ? "hidden " : "visible"}`
       }
     >
       {children}
