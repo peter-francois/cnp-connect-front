@@ -2,7 +2,7 @@ import axios from "axios";
 import { type UserInterface } from "../interfaces/UsersInterface";
 import { UserRolesEnum } from "../enum/UserEnum";
 
-const url = "./data/user.json";
+const url = "/data/user.json";
 
 export const getUsers = async (): Promise<UserInterface[]> => {
   try {
@@ -14,14 +14,14 @@ export const getUsers = async (): Promise<UserInterface[]> => {
   }
 };
 
-export const getUsersById = async (id: number): Promise<UserInterface | null> => {
+export const getUsersById = async (id: number): Promise<UserInterface> => {
   try {
     const users = await getUsers();
     const user = users.find((item) => item.id === id)!; // The ! is to force to return UserInterface
     return user;
   } catch (error) {
     console.log(error);
-    return null;
+    throw new Error();
   }
 };
 

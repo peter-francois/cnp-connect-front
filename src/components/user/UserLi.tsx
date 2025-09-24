@@ -1,9 +1,10 @@
-import type { ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
 import PrimaryButton from "../utils/PrimaryButton";
+import type { UserRolesEnum } from "../../enum/UserEnum";
 
 interface UserLiInterface {
   label: string;
-  value: string | boolean;
+  value: string | boolean | JSX.Element | UserRolesEnum;
   icon?: ReactNode;
 }
 
@@ -18,7 +19,7 @@ const UserLi = ({ label, value, icon }: UserLiInterface) => {
           </PrimaryButton>
         )}
       </div>
-      <p className="pl-2">{value}</p>
+      <div className="pl-2">{value}</div>
     </li>
   );
 };

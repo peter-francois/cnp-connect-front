@@ -3,11 +3,11 @@ import PrimaryButton from "../components/utils/PrimaryButton";
 import UserLi from "../components/user/UserLi";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { XCircleIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
 import SecondaryTitle from "../components/utils/Secondarytitle";
 import StatusIsConnect from "../components/user/StatusIsConnect";
 import { useEffect, useState } from "react";
 import { getUsersById } from "../api/user";
+import type { UserInterface } from "../interfaces/UsersInterface";
 
 // method => PATH
 // path => api/v1/users/:userId
@@ -22,22 +22,15 @@ import { getUsersById } from "../api/user";
 // Conducteur : peut voir la ligne et le train qui lui sont affectés.
 // Utilisateur connecté voir son profil et peut changer sa photo et son statut
 const User = () => {
-  const user = {
-    name: "Peter",
-    role: "sup",
-    hiredAt: "2025",
-    email: "email",
-    status: true,
-    lignes: [1, 3, 6],
-    train: 56,
-  };
+  const allLignes = ["A", "B", "C", "D"];
+  const [currentUser, setCurrentUser] = useState<UserInterface>();
   const [toggleReassign, setToggleReassign] = useState(false);
   const { id } = useParams();
-  const [user, setUser] = useState();
+
   useEffect(() => {
     const getData = async () => {
-      const user = await getUsersById(id);
-      console.log("Peter", user);
+      const user = await getUsersById(Number(id));
+      setCurrentUser(user);
     };
     getData();
   }, [id]);
@@ -48,8 +41,8 @@ const User = () => {
         <div className="flex flex-col gap-3">
           <img
             className="rounded-full shadow-xl shadow-neutral-100/15"
-            src="https://randomuser.me/api/portraits/women/1.jpg"
-            alt="user lastName"
+            src={currentUser?.avatar_url}
+            alt={currentUser?.firstName}
           />
           {/* input type file pour l'ajout de la nouvelle photo */}
           <Link className="text-sm" to={"/"}>
@@ -57,22 +50,27 @@ const User = () => {
           </Link>
         </div>
         <ul>
-          <UserLi label="Nom" value={user.name} />
-          <UserLi label="Rôle" value={user.role} />
-          <UserLi label="Embauché depuis le" value={user.hiredAt} />
+          <UserLi label="Nom" value={`${currentUser?.lastName} ${currentUser?.firstName}`} />
+          <UserLi label="Rôle" value={`${currentUser?.role}`} />
+          <UserLi
+            label="Embauché depuis le"
+            value={currentUser?.hiringAt ? new Date(currentUser.hiringAt).toLocaleDateString("fr-FR") : ""}
+          />
         </ul>
       </section>
 
       <section>
         <ul>
-          <UserLi label="Email" value={user.email} icon={<EnvelopeIcon width={20}></EnvelopeIcon>} />
+          <UserLi label="Email" value={`${currentUser?.email}`} icon={<EnvelopeIcon width={20}></EnvelopeIcon>} />
           <UserLi
             label="Status"
             value={
               <div className="flex gap-3">
-                <p>Connecté</p>
+                <p>{currentUser?.isConnected ? "Connecté" : "Non connecté"}</p>
                 <div
-                  className={`rounded-full mt-1 ml-2 w-3 h-3 p-2 ${user.status ? "bg-green-600" : "bg-red-600"}`}
+                  className={`rounded-full mt-1 ml-2 w-3 h-3 p-2 ${
+                    currentUser?.isConnected ? "bg-green-600" : "bg-red-600"
+                  }`}
                 ></div>
               </div>
             }
@@ -80,9 +78,9 @@ const User = () => {
           <UserLi
             label="Affectation"
             value={
-              user.lignes
-                ? `Ligne${user.lignes.length == 1 ? "" : "s"} ${user.lignes.join(", ")}`
-                : `Train ${user.train}`
+              currentUser?.lignesId
+                ? `Ligne${currentUser?.lignesId?.length == 1 ? "" : "s"} ${currentUser?.lignesId?.join(", ")}`
+                : `Train ${currentUser?.trainsId}`
             }
           />
         </ul>
@@ -105,13 +103,13 @@ const User = () => {
             <button onClick={() => setToggleReassign(false)} aria-label="Fermer" className="relative ">
               {<XCircleIcon width={30} className="cursor-pointer absolute -top-7 -left-7" />}
             </button>
-            <SecondaryTitle customClass="mb-3">Ligne</SecondaryTitle>
+            <SecondaryTitle customClass="mb-3">Lignes</SecondaryTitle>
             <div className="gap-3 flex-wrap center">
-              {user.lignes.map((ligne) => (
+              {allLignes.map((ligne) => (
                 <PrimaryButton
+                  key={ligne}
                   type="button"
-                  customClass="border 
-              w-12"
+                  customClass="border w-12 focus:outline-none focus:ring focus:border-blue-300 focus:bg-indigo-900"
                 >
                   {ligne}
                 </PrimaryButton>
