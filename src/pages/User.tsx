@@ -66,7 +66,7 @@ const User = () => {
             label="Affectation"
             value={
               user.lignes
-                ? `Ligne${user.lignes.length == 1 ? "" : "s"} ${user.lignes.join(", ")}`
+                ? `Ligne${user.lignes.length !== 1 && "s"} ${user.lignes.join(", ")}`
                 : `Train ${user.train}`
             }
           />
