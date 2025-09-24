@@ -63,15 +63,11 @@ const User = () => {
         <ul>
           <UserLi label="Email" value={`${currentUser?.email}`} icon={<EnvelopeIcon width={20}></EnvelopeIcon>} />
           <UserLi
-            label="Status"
+            label="Statut"
             value={
               <div className="flex gap-3">
-                <p>{currentUser?.isConnected ? "Connecté" : "Non connecté"}</p>
-                <div
-                  className={`rounded-full mt-1 ml-2 w-3 h-3 p-2 ${
-                    currentUser?.isConnected ? "bg-green-600" : "bg-red-600"
-                  }`}
-                ></div>
+                <p>Connecté</p>
+                <StatusIsConnect status={user.status}></StatusIsConnect>
               </div>
             }
           />
