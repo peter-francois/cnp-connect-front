@@ -6,6 +6,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Users from "./pages/Users";
 import ConnectionPage from "./pages/Connection";
 import ConnectedLayout from "./layouts/ConnectedLayout";
+import User from "./pages/User";
 import NouvelleAlerte from "./pages/alertes/NouvelleAlerte";
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
         </Route>
         <Route element={<ConnectedLayout />}>
           <Route path="/utilisateurs" element={<Users />} />
+          <Route path="/utilisateurs/:id" element={<User />} />
           <Route path="/nouvelle-alert" element={<NouvelleAlerte />} />
         </Route>
       </Routes>
