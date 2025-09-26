@@ -14,7 +14,7 @@ const Priority = ({label,priority,name,register, errors, isSelected}: PriorityIn
   return (
 
     <>
-      <label className={`border border-indigo-600 cursor-pointer rounded-2xl py-3 gap-1 w-35 text-center ${isSelected ? "bg-indigo-400 text-gray-900" : ""}`}>
+      <label className={`border border-indigo-600 cursor-pointer rounded-2xl py-3 gap-1 w-25 text-center ${isSelected && "bg-indigo-400 text-gray-900"}`}>
         <input 
             type="radio" 
             id={name}

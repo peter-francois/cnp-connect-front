@@ -6,9 +6,13 @@ import { useNavigate } from "react-router";
 import { type UseFormNewAlert, schemaNewAlert } from "../../types/formData/newAlert";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Priority from "../../components/alert/Priority";
+import { useMutation } from "@tanstack/react-query";
+import type { AlertInterface } from "../../interfaces/AlertInterface";
+import { addAlert } from "../../api/alert";
 
 const NouvelleAlerte = () => {
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -17,12 +21,21 @@ const NouvelleAlerte = () => {
   } = useForm({
     resolver: zodResolver(schemaNewAlert),
   });
+
   const selectedPriority = watch("priority");
+
+  //submit and form validate = use createAlertMutation with data
   const onValidate: SubmitHandler<UseFormNewAlert> = (data) => {
     console.log(data);
-
-    // navigate("/");
+    createAlertMutation.mutate(data);
   };
+  //Fonction useMatation params (data) = Content + Priority + LinesList
+  const createAlertMutation = useMutation({
+    mutationFn: (data: AlertInterface) => addAlert(data),
+    onSuccess: () => {
+      navigate("/utilisateurs");
+    },
+  });
 
   return (
     <div>
@@ -53,8 +66,11 @@ const NouvelleAlerte = () => {
         </div>
 
         <LinesList register={register} />
-
-        <PrimaryButton type="submit">Envoyer</PrimaryButton>
+        <div className="w-full flex justify-center">
+          <PrimaryButton customClass="w-50 mx-auto mt-5 px-5 py-2 text-center" type="submit">
+            Envoyer
+          </PrimaryButton>
+        </div>
       </form>
     </div>
   );

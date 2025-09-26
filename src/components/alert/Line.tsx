@@ -14,12 +14,12 @@ const Line = ({ lineData, onClick, isSelected, register }: LineDataInterface) =>
       <label
         htmlFor={lineData.name}
         onClick={onClick}
-        className={`p-3 border border-indigo-600 rounded-2xl py-2 px-4 cursor-pointer ${isSelected ? "bg-indigo-400 text-gray-900" : ""}
+        className={`p-3 border border-indigo-600 rounded-2xl text-center py-2 px-4 cursor-pointer ${isSelected && "bg-indigo-400 text-gray-900"}
       `}
       >
         {lineData && lineData.name}
-      </label>{" "}
-      <input className="hidden" type="checkbox" id={lineData.name} value={lineData.id} {...register("lines")} />
+      </label>
+      <input className="absolute -top-96 -left-96" type="checkbox" id={lineData.name} checked={isSelected} value={lineData.id} {...register("lines")}  readOnly />
     </>
   );
 };
