@@ -5,6 +5,7 @@ import StatusIsConnect from "./StatusIsConnect";
 import UserLign from "./UserLign";
 import CloseButton from "./CloseButton";
 import UserTrain from "./UserTrain";
+import SecondaryTitle from "../utils/Secondarytitle";
 
 interface UserPropsInterface {
   userData: UserInterface;
@@ -32,10 +33,19 @@ const User = ({ userData, currentUser, setCurrentUser }: UserPropsInterface) => 
         {currentUser == userData.id && (
           <div className=" absolute border rounded w-full bg-indigo-600  top-11 left-0 z-20 p-3 flex justify-between">
             <CloseButton onClose={() => setCurrentUser(null)} />
-            <StatusIsConnect status={userData.isConnected} />
-            <UserLign lignesId={userData.lignesId} />
-            <UserTrain train={userData.trainsId} />
-            <Link to={`/users/${userData.id}`}>
+            <div className="flex">
+              <SecondaryTitle>Statut:</SecondaryTitle>
+              <StatusIsConnect status={userData.isConnected} />
+            </div>
+            <div className="flex">
+              <SecondaryTitle>Ligne{userData.lignesId && userData.lignesId.length >= 2 && "s"}:</SecondaryTitle>
+              <UserLign lignesId={userData.lignesId} />
+            </div>
+            <div className="flex">
+              <SecondaryTitle>Train:</SecondaryTitle>
+              <UserTrain train={userData.trainsId} />
+            </div>
+            <Link to={`/utilisateurs/${userData.id}`}>
               <EllipsisVerticalIcon width={20} className=" text-white" />
             </Link>
           </div>
