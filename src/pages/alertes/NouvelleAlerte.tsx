@@ -41,7 +41,7 @@ const NouvelleAlerte = () => {
     <div>
       <form onSubmit={handleSubmit(onValidate)}>
         <Textarea id="content" placeholder="Decrivez-l'alerte" register={register} errors={errors} />
-        <div className="w-full flex justify-between my-7">
+        <div className="w-full flex justify-between my-5">
           <Priority
             name="priority"
             priority="soft"
