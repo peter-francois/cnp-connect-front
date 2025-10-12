@@ -8,7 +8,7 @@ interface UserLiInterface {
   icon?: ReactNode;
 }
 
-const UserLi = ({ label, value, icon }: UserLiInterface) => {
+const UserField = ({ label, value, icon }: UserLiInterface) => {
   return (
     <li className="my-2.5">
       <div className="flex justify-between">
@@ -24,4 +24,4 @@ const UserLi = ({ label, value, icon }: UserLiInterface) => {
   );
 };
 
-export default UserLi;
+export default UserField;

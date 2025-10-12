@@ -1,14 +1,12 @@
+import { EnvelopeIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Link, useParams } from "react-router";
-import PrimaryButton from "../components/utils/PrimaryButton";
-import UserLi from "../components/user/UserLi";
-import { EnvelopeIcon } from "@heroicons/react/24/outline";
-import { XCircleIcon } from "@heroicons/react/24/solid";
-import SecondaryTitle from "../components/utils/Secondarytitle";
-import StatusIsConnect from "../components/user/StatusIsConnect";
+import StatusIsConnected from "../../components/user/StatusIsConnected";
+import UserField from "../../components/user/UserField";
+import PrimaryButton from "../../components/utils/PrimaryButton";
+import SecondaryTitle from "../../components/utils/SecondaryTitle";
 import { useEffect, useState } from "react";
-import { getUsersById } from "../api/user";
-import type { UserInterface } from "../interfaces/UsersInterface";
-
+import { getUsersById } from "../../api/user.api";
+import type { UserInterface } from "../../types/interfaces/UserInterface";
 // method => PATH
 // path => api/v1/users/:userId
 // method => GET
@@ -21,9 +19,11 @@ import type { UserInterface } from "../interfaces/UsersInterface";
 // Coordinateur : peut sélectionner une ligne et attribuer un train disponible sur cette ligne à un conducteur.
 // Conducteur : peut voir la ligne et le train qui lui sont affectés.
 // Utilisateur connecté voir son profil et peut changer sa photo et son statut
-const User = () => {
+
+const UserDetailsPage = () => {
   const allLignes = ["A", "B", "C", "D"];
   const [currentUser, setCurrentUser] = useState<UserInterface>();
+
   const [toggleReassign, setToggleReassign] = useState(false);
   const { id } = useParams();
 
@@ -35,7 +35,7 @@ const User = () => {
     getData();
   }, [id]);
 
-  return (
+  return currentUser ? (
     <div className="my-3">
       <section className="flex justify-around items-center gap-8 mb-4">
         <div className="flex flex-col gap-3">
@@ -50,28 +50,25 @@ const User = () => {
           </Link>
         </div>
         <ul>
-          <UserLi label="Nom" value={`${currentUser?.lastName} ${currentUser?.firstName}`} />
-          <UserLi label="Rôle" value={`${currentUser?.role}`} />
-          <UserLi
-            label="Embauché depuis le"
-            value={currentUser?.hiringAt ? new Date(currentUser.hiringAt).toLocaleDateString("fr-FR") : ""}
-          />
+          <UserField label="Nom" value={currentUser.firstName} />
+          <UserField label="Rôle" value={currentUser.role} />
+          <UserField label="Embauché depuis le" value={currentUser.hiringAt} />
         </ul>
       </section>
 
       <section>
         <ul>
-          <UserLi label="Email" value={`${currentUser?.email}`} icon={<EnvelopeIcon width={20}></EnvelopeIcon>} />
-          <UserLi
+          <UserField label="Email" value={currentUser.email} icon={<EnvelopeIcon width={20}></EnvelopeIcon>} />
+          <UserField
             label="Statut"
             value={
               <div className="flex gap-3">
                 <p>Connecté</p>
-                <StatusIsConnect status={user.status}></StatusIsConnect>
+                <StatusIsConnected status={currentUser.isActif}></StatusIsConnected>
               </div>
             }
           />
-          <UserLi
+          <UserField
             label="Affectation"
             value={
               currentUser?.lignesId
@@ -116,7 +113,9 @@ const User = () => {
         <PrimaryButton type="submit">Nouveau message</PrimaryButton>
       </div>
     </div>
+  ) : (
+    <span>Aucun utilisateur touvé</span>
   );
 };
 
-export default User;
+export default UserDetailsPage;
