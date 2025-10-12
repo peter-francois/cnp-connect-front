@@ -1,12 +1,15 @@
-import { EnvelopeIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { Link, useParams } from "react-router";
 import StatusIsConnected from "../../components/user/StatusIsConnected";
 import UserField from "../../components/user/UserField";
 import PrimaryButton from "../../components/utils/PrimaryButton";
-import SecondaryTitle from "../../components/utils/SecondaryTitle";
 import { useEffect, useState } from "react";
 import { getUsersById } from "../../api/user.api";
 import type { UserInterface } from "../../types/interfaces/UserInterface";
+import Assignment from "../../components/user/Assignment";
+import type { LineInterface } from "../../types/interfaces/LineInterface";
+import { getLines } from "../../api/line.api";
+import { UserRolesEnum } from "../../types/enum/UserEnum";
 // method => PATH
 // path => api/v1/users/:userId
 // method => GET
@@ -21,11 +24,18 @@ import type { UserInterface } from "../../types/interfaces/UserInterface";
 // Utilisateur connecté voir son profil et peut changer sa photo et son statut
 
 const UserDetailsPage = () => {
-  const allLignes = ["A", "B", "C", "D"];
-  const [currentUser, setCurrentUser] = useState<UserInterface>();
-
-  const [toggleReassign, setToggleReassign] = useState(false);
   const { id } = useParams();
+  const [currentUser, setCurrentUser] = useState<UserInterface>();
+  const [lines, setLines] = useState<LineInterface[]>([]);
+  const roleUserFromToken = UserRolesEnum.supervisor;
+
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getLines();
+      setLines(data);
+    };
+    getData();
+  });
 
   useEffect(() => {
     const getData = async () => {
@@ -41,8 +51,8 @@ const UserDetailsPage = () => {
         <div className="flex flex-col gap-3">
           <img
             className="rounded-full shadow-xl shadow-neutral-100/15"
-            src={currentUser?.avatar_url}
-            alt={currentUser?.firstName}
+            src={currentUser.avatar_url}
+            alt={currentUser.firstName}
           />
           {/* input type file pour l'ajout de la nouvelle photo */}
           <Link className="text-sm" to={"/"}>
@@ -57,6 +67,7 @@ const UserDetailsPage = () => {
       </section>
 
       <section>
+        {/*je doit sortir l'icone et faire une sesction 2 plus propre comme au dessus  */}
         <ul>
           <UserField label="Email" value={currentUser.email} icon={<EnvelopeIcon width={20}></EnvelopeIcon>} />
           <UserField
@@ -64,52 +75,23 @@ const UserDetailsPage = () => {
             value={
               <div className="flex gap-3">
                 <p>Connecté</p>
-                <StatusIsConnected status={currentUser.isActif}></StatusIsConnected>
+                <StatusIsConnected status={currentUser.isConnected}></StatusIsConnected>
               </div>
             }
           />
           <UserField
             label="Affectation"
             value={
-              currentUser?.lignesId
-                ? `Ligne${currentUser?.lignesId?.length == 1 ? "" : "s"} ${currentUser?.lignesId?.join(", ")}`
-                : `Train ${currentUser?.trainsId}`
+              currentUser.lignesId
+                ? `Ligne${currentUser.lignesId.length == 1 ? "" : "s"} ${currentUser.lignesId.join(", ")}`
+                : `Train ${currentUser.trainsId}`
             }
           />
         </ul>
       </section>
       <div className="flex flex-col gap-6 my-4 mx-auto">
-        {/* boutton asignation: premiere étape affectations de la ligne puis assignation du trains */}
+        {roleUserFromToken !== UserRolesEnum.conductor && <Assignment userRole={currentUser.role} lines={lines} />}
 
-        <PrimaryButton
-          type="button"
-          handleOnCLick={() => {
-            setToggleReassign(!toggleReassign);
-          }}
-          customClass="px-3"
-        >
-          Réasignations
-        </PrimaryButton>
-
-        {toggleReassign && (
-          <div className=" border rounded bg-slate-900 p-3 flex flex-col">
-            <button onClick={() => setToggleReassign(false)} aria-label="Fermer" className="relative ">
-              {<XCircleIcon width={30} className="cursor-pointer absolute -top-7 -left-7" />}
-            </button>
-            <SecondaryTitle customClass="mb-3">Lignes</SecondaryTitle>
-            <div className="gap-3 flex-wrap center">
-              {allLignes.map((ligne) => (
-                <PrimaryButton
-                  key={ligne}
-                  type="button"
-                  customClass="border w-12 focus:outline-none focus:ring focus:border-blue-300 focus:bg-indigo-900"
-                >
-                  {ligne}
-                </PrimaryButton>
-              ))}
-            </div>
-          </div>
-        )}
         <PrimaryButton type="submit">Nouveau message</PrimaryButton>
       </div>
     </div>
