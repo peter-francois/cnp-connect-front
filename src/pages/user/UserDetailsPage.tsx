@@ -62,7 +62,14 @@ const UserDetailsPage = () => {
         <ul>
           <UserField label="Nom" value={currentUser.firstName} />
           <UserField label="Rôle" value={currentUser.role} />
-          <UserField label="Embauché depuis le" value={currentUser.hiringAt} />
+          <UserField
+            label="Embauché depuis le"
+            value={new Date(currentUser.hiringAt).toLocaleDateString("fr-FR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+            })}
+          />
         </ul>
       </section>
 
