@@ -1,17 +1,17 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
-import PrimaryTitle from "../../components/utils/PrimaryTitle";
-import Input from "../../components/utils/Input";
-import PrimaryButton from "../../components/utils/PrimaryButton";
+import PrimaryTitle from "../../components/ui/PrimaryTitle";
+import Input from "../../components/ui/Input";
+import PrimaryButton from "../../components/ui/PrimaryButton";
 import { useNavigate } from "react-router";
-import { resetPasswordSchema, type UseFormResetPassword } from "../../types/formData/resetPasswordSchema";
+import { resetPasswordSchema, type UseFormResetPassword } from "../../types/formSchema/resetPasswordSchema";
 import { getUsers } from "../../api/user.api";
 import { useState } from "react";
-import PopUp from "../../components/utils/PopUp";
+import PopUp from "../../components/ui/PopUp";
 import type { UserInterface } from "../../types/interfaces/UserInterface";
 
-const ResetPassword = () => {
+const ResetPasswordPage = () => {
   const navigate = useNavigate();
   const [isValided, setIsValided] = useState(false);
   const [user, setUser] = useState<UserInterface | null>(null);
@@ -67,4 +67,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ResetPasswordPage;
