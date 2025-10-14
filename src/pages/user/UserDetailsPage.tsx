@@ -2,7 +2,7 @@ import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import { Link, useParams } from "react-router";
 import StatusIsConnected from "../../components/user/StatusIsConnected";
 import UserField from "../../components/user/UserField";
-import PrimaryButton from "../../components/utils/PrimaryButton";
+import PrimaryButton from "../../components/ui/PrimaryButton";
 import { useEffect, useState } from "react";
 import { getUsersById } from "../../api/user.api";
 import type { UserInterface } from "../../types/interfaces/UserInterface";
