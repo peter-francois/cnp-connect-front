@@ -40,6 +40,7 @@ const UsersListPage = () => {
           <span className="pl-14">Nom</span>
           <span className="pr-10">Poste</span>
         </div>
+        
         <ul>
           {filteredUsers.map((user) => (
             <UserInfos userData={user} key={user.id} currentUser={currentUser} setCurrentUser={setCurrentUser} />

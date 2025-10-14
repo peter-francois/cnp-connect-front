@@ -18,7 +18,7 @@ const UserInfos = ({ userData, currentUser, setCurrentUser }: UserPropsInterface
     <>
       <li
         className={`flex items-center justify-between gap-4 py-2 px-7 relative cursor-pointer ${
-          currentUser == userData.id ? "bg-indigo-300" : "hover:bg-indigo-300 "
+          currentUser == userData.id ? "bg-indigo-300" : "hover:bg-indigo-300"
         } `}
         onClick={() => setCurrentUser(currentUser === userData.id ? null : userData.id)}
       >
@@ -31,22 +31,25 @@ const UserInfos = ({ userData, currentUser, setCurrentUser }: UserPropsInterface
 
         <span>{userData.role}</span>
         {currentUser == userData.id && (
-          <div className=" absolute border rounded w-full bg-indigo-600  top-11 left-0 z-20 p-3 flex justify-between">
+          <div className="absolute border rounded w-full bg-indigo-600  top-11 left-0 z-20 p-3 flex justify-between">
             <CloseButton onClose={() => setCurrentUser(null)} />
             <div className="flex">
               <SecondaryTitle>Statut:</SecondaryTitle>
               <StatusIsConnected status={userData.isConnected} />
             </div>
+
             <div className="flex">
               <SecondaryTitle>Ligne{userData.lignesId && userData.lignesId.length >= 2 && "s"}:</SecondaryTitle>
               <UserLines lignesId={userData.lignesId} />
             </div>
+
             <div className="flex">
               <SecondaryTitle>Train:</SecondaryTitle>
               <UserTrain train={userData.trainsId} />
             </div>
+
             <Link to={`/utilisateurs/${userData.id}`}>
-              <EllipsisVerticalIcon width={20} className=" text-white" />
+              <EllipsisVerticalIcon width={20} className="text-white" />
             </Link>
           </div>
         )}

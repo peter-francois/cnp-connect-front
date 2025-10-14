@@ -1,24 +1,18 @@
-import type { JSX, ReactNode } from "react";
-import PrimaryButton from "../ui/PrimaryButton";
 
 interface UserLiInterface {
   label: string;
-  value: string | boolean | JSX.Element;
-  icon?: ReactNode;
+  value: string;
 }
 
-const UserField = ({ label, value, icon }: UserLiInterface) => {
+// mettre des ul dans le li a la place de la div
+
+const UserField = ({ label, value }: UserLiInterface) => {
   return (
-    <li className="my-2.5">
+    <li className="my-3">
       <div className="flex justify-between">
-        <p className="font-bold mb-1">{label}: </p>
-        {icon && (
-          <PrimaryButton type="button" customClass="px-2 relative right-0">
-            {icon}
-          </PrimaryButton>
-        )}
+        <h3 className="font-bold mb-1">{label}: </h3>
       </div>
-      <p className="pl-2">{value}</p>
+      <p>{value}</p>
     </li>
   );
 };
