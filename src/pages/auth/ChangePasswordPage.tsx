@@ -26,7 +26,7 @@ const ChangePasswordPage = () => {
       <PrimaryTitle>Changer le mot de passe</PrimaryTitle>
 
       <form className="form" onSubmit={handleSubmit(onValidate)}>
-        <div className="card-border">
+        <div className="card-border px-7 py-5">
           <Input
             id="newPassword"
             label="Nouveau mot de passe"

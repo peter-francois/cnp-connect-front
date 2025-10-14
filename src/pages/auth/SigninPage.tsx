@@ -42,7 +42,7 @@ const SigninPage = () => {
     <>
       <PrimaryTitle>Connexion</PrimaryTitle>
       <form onSubmit={handleSubmit(sendDataToBack)} className="form">
-        <div className="card-border ">
+        <div className="card-border px-7 py-5">
           <Input
             id="email"
             type="email"

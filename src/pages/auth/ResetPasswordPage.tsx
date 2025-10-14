@@ -44,7 +44,7 @@ const ResetPasswordPage = () => {
       <PrimaryTitle>Réinitialiser mot de passe</PrimaryTitle>
 
       <form className="form" onSubmit={handleSubmit(onValidate)}>
-        <div className="card-border relative">
+        <div className="card-border relative px-7 py-5">
           <Input
             label="Email"
             id="email"
