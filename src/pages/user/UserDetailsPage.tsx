@@ -46,12 +46,7 @@ const UserDetailsPage = () => {
   //   queryKey: [`user${id}`],
   //   queryFn: () => getUsersById(Number(id)),
   // });
-const {
-    isPending,
-    isError,
-    data: currentUser,
-    error,
-  } = useUserDetails(Number(id))
+  const { isPending, isError, data: currentUser, error } = useUserDetails(Number(id));
 
   if (isPending) {
     return <span>Loading...</span>;
@@ -78,6 +73,7 @@ const {
 
         <ul>
           <UserField label="Nom" value={currentUser.firstName} />
+          {/* @dev faire le changement de Supervisor a superviseur */}
           <UserField label="Rôle" value={currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1)} />
           <UserField
             label="Date d'embauche"
