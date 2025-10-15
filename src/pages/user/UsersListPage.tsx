@@ -5,6 +5,7 @@ import HeaderUsersPage from "../../components/user/HeaderUsersPage";
 import UserInfos from "../../components/user/UserInfos";
 import PrimaryTitle from "../../components/ui/PrimaryTitle";
 
+
 const UsersListPage = () => {
   const [search, setSearch] = useState("");
   const [currentUser, setCurrentUser] = useState<number | undefined>(undefined);
@@ -13,6 +14,7 @@ const UsersListPage = () => {
     queryKey: ["users"],
     queryFn: getUsers,
   });
+
 
   if (isPending) {
     return <span>Loading...</span>;
