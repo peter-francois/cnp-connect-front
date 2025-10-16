@@ -5,6 +5,7 @@ import UserField from "../../components/user/UserField";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import Assignment from "../../components/user/Assignment";
 import { UserRolesEnum } from "../../types/enum/UserEnum";
+import { useUserDetails } from "../../hooks/useUserDetails";
 // method => PATH
 // path => api/v1/users/:userId
 // method => GET
@@ -48,6 +49,7 @@ const UserDetailsPage = () => {
 
         <ul>
           <UserField label="Nom" value={currentUser.firstName} />
+          {/* @dev faire le changement de Supervisor a superviseur */}
           <UserField label="Rôle" value={currentUser.role.charAt(0).toUpperCase() + currentUser.role.slice(1)} />
           <UserField
             label="Date d'embauche"
