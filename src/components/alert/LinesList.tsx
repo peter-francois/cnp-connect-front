@@ -4,26 +4,40 @@ import Line from "./Line";
 import { useState } from "react";
 import type { LineInterface } from "../../types/interfaces/LineInterface";
 import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import { useLinesList } from "../../hooks/useLinesList";
+import { UserRolesEnum } from "../../types/enum/UserEnum";
 
 interface LinesListInterface {
   register: UseFormRegister<any>; // @dev find right type '--'
-  errors?: FieldErrors;
+  type: string; // @dev enum
+  currentUserRole: UserRolesEnum;
 }
 
-const LinesList = ({ register, errors }: LinesListInterface) => {
+const LinesList = ({ register, type , currentUserRole}: LinesListInterface) => {
   const [selectLines, setSelectLines] = useState<LineInterface[]>([]);
-  const { isPending, isError, data, error } = useQuery({
-    queryKey: ["lines"],
-    queryFn: getLines,
-  });
+  const { isPending, isError, data, error } = useLinesList();
+  console.log(selectLines)
 
   const handleSelectLines = (line: LineInterface) => {
     if (!selectLines.some((item) => item.id === line.id)) {
-      setSelectLines((prev) => [...prev, line]);
+      
+      if (currentUserRole == UserRolesEnum.coordinator) setSelectLines((prev) => [...prev, line]);
+      else setSelectLines([line]);
     } else {
-      setSelectLines((prev) => prev.filter((item) => item.id !== line.id));
+      if (currentUserRole == UserRolesEnum.coordinator) setSelectLines((prev) => prev.filter((item) => item.id !== line.id));
+      else setSelectLines([]);
     }
   };
+  // const handleSelectLines = (line: LineInterface) => {
+  //   if (!selectLines.some((item) => item.id === line.id)) {
+ // if coordinator setSelectLines((prev) => [...prev, line]);
+  //   else conductor setSelectLines([line]);
+  // //   } else {
+
+  // //    if coordinator setSelectLines((prev) => prev.filter((item) => item.id !== line.id));
+  //       else conductor 
+  //   }
+  // };
 
   if (isPending) {
     return <span>Loading...</span>;
@@ -53,10 +67,10 @@ const LinesList = ({ register, errors }: LinesListInterface) => {
             onClick={() => handleSelectLines(line)}
             isSelected={selectLines.some((item) => item.id === line.id)}
             register={register}
+            type={type}
           />
         ))}
       </div>
-      {errors && errors["lines"] && <p className="text-red-500 text-sm ml-1">{errors["lines"].message as string}</p>}
     </>
   );
 };

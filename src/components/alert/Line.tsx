@@ -6,9 +6,10 @@ interface LineDataInterface {
   onClick: () => void;
   isSelected: boolean;
   register: UseFormRegister<any>; // @dev find right type '--'
+  type:string
 }
 
-const Line = ({ lineData, onClick, isSelected, register }: LineDataInterface) => {
+const Line = ({ lineData, onClick, isSelected, register,type }: LineDataInterface) => {
   return (
     <>
       <label
@@ -18,11 +19,11 @@ const Line = ({ lineData, onClick, isSelected, register }: LineDataInterface) =>
           isSelected && "bg-indigo-400 text-gray-900"
         }`}
       >
-        {lineData && lineData.name}
+        {lineData && lineData.name}  {lineData.trains && lineData.trains}
       </label>
       <input
         className="absolute -left-96"
-        type="checkbox"
+        type={ type }
         id={lineData.name}
         checked={isSelected}
         value={lineData.id}

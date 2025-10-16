@@ -70,7 +70,7 @@ const AlerCreatetPage = () => {
           isSelected={selectedPriority === "urgent"}
         />
       </div>
-      <LinesList register={register} />
+      <LinesList register={register} type="checkbox" />
       <div className="w-full flex justify-center">
         <PrimaryButton customClass="w-50 mx-auto mt-5 px-5 py-2 text-center" type="submit">
           Envoyer
