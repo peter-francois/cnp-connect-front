@@ -4,19 +4,33 @@ import PrimaryButton from "../ui/PrimaryButton";
 import { UserRolesEnum } from "../../types/enum/UserEnum";
 import type { LineInterface } from "../../types/interfaces/LineInterface";
 import { useState } from "react";
+//import { useEffect, useState } from "react";
+//import { getLines } from "../../api/line.api";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLinesList } from "../../hooks/useLinesList";
 
 interface AssignmentInterface {
   currentUserRole: UserRolesEnum;
-  lines: LineInterface[];
 }
 
-const Assignment = ({ currentUserRole, lines }: AssignmentInterface) => {
+const Assignment = ({ currentUserRole }: AssignmentInterface) => {
   const [toggleReassign, setToggleReassign] = useState(false);
+  const { isPending, isError, data, error } = useLinesList();
+
   if (currentUserRole === UserRolesEnum.supervisor) {
     return null;
   }
+
+
+  if (isPending) {
+    return <span>Loading...</span>;
+  }
+
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
+
   return (
     <>
       <PrimaryButton type="button" handleOnCLick={() => setToggleReassign(!toggleReassign)} customClass="px-3">
@@ -34,7 +48,7 @@ const Assignment = ({ currentUserRole, lines }: AssignmentInterface) => {
 
           <SecondaryTitle customClass="mb-3">Lignes</SecondaryTitle>
           <div className="gap-3 flex-wrap center">
-            {lines.map((line) => (
+            {data?.map((line) => (
               <PrimaryButton
                 key={line.id}
                 type="button"
@@ -42,6 +56,7 @@ const Assignment = ({ currentUserRole, lines }: AssignmentInterface) => {
               >
                 {line.name}
               </PrimaryButton>
+              
             ))}
           </div>
         </div>

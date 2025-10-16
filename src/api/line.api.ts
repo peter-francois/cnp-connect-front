@@ -6,8 +6,8 @@ export const getLines = async (): Promise<LineInterface[]> => {
   try {
     const res = await axios.get<LineInterface[]>(url);
     return res.data;
-  } catch (error) {
-    console.log(error);
-    return [];
+  } catch {
+    throw new Error("Not found");
+    // return [];
   }
 };

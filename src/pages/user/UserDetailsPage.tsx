@@ -3,12 +3,7 @@ import { Link, useParams } from "react-router";
 import StatusIsConnected from "../../components/user/StatusIsConnected";
 import UserField from "../../components/user/UserField";
 import PrimaryButton from "../../components/ui/PrimaryButton";
-import { useEffect, useState } from "react";
-import { getUsersById } from "../../api/user.api";
-import type { UserInterface } from "../../types/interfaces/UserInterface";
 import Assignment from "../../components/user/Assignment";
-import type { LineInterface } from "../../types/interfaces/LineInterface";
-import { getLines } from "../../api/line.api";
 import { UserRolesEnum } from "../../types/enum/UserEnum";
 // method => PATH
 // path => api/v1/users/:userId
@@ -25,26 +20,16 @@ import { UserRolesEnum } from "../../types/enum/UserEnum";
 
 const UserDetailsPage = () => {
   const { id } = useParams();
-  const [currentUser, setCurrentUser] = useState<UserInterface>();
-  const [lines, setLines] = useState<LineInterface[]>([]);
   const roleUserFromToken: UserRolesEnum = UserRolesEnum.coordinator;
+  const { isPending, isError, data: currentUser, error } = useUserDetails(Number(id));
 
-  // @dev use tanstack
-  useEffect(() => {
-    const getData = async () => {
-      const data = await getLines();
-      setLines(data);
-    };
-    getData();
-  }, []);
+  if (isPending) {
+    return <span>Loading...</span>;
+  }
 
-  useEffect(() => {
-    const getData = async () => {
-      const user = await getUsersById(Number(id));
-      setCurrentUser(user);
-    };
-    getData();
-  }, [id]);
+  if (isError) {
+    return <span>Error: {error.message}</span>;
+  }
 
   return currentUser ? (
     <div className="my-3">
@@ -104,9 +89,7 @@ const UserDetailsPage = () => {
       </section>
 
       <div className="flex flex-col gap-6 my-4 mx-auto">
-        {roleUserFromToken != UserRolesEnum.conductor && (
-          <Assignment currentUserRole={currentUser.role} lines={lines} />
-        )}
+        {roleUserFromToken != UserRolesEnum.conductor && <Assignment currentUserRole={currentUser.role} />}
 
         <PrimaryButton type="submit">Nouveau message</PrimaryButton>
       </div>
