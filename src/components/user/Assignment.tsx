@@ -6,7 +6,7 @@ import type { LineInterface } from "../../types/interfaces/LineInterface";
 import { useState } from "react";
 //import { useEffect, useState } from "react";
 //import { getLines } from "../../api/line.api";
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { useForm, useWatch, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 //import { useLinesList } from "../../hooks/useLinesList";
 //import Line from "../alert/Line";
@@ -27,6 +27,8 @@ interface AssignmentInterface {
 
 const Assignment = ({ currentUserRole }: AssignmentInterface) => {
   const [toggleReassign, setToggleReassign] = useState(false);
+  const [selectedLine, setSelectedLine] = useState<LineInterface[]>([]);
+  console.log("🚀 ~ Assignment.tsx:31 ~ Assignment ~ selectedLine:", selectedLine)
   const {
     register: coordinatorRegister,
     handleSubmit,
@@ -51,7 +53,9 @@ const Assignment = ({ currentUserRole }: AssignmentInterface) => {
   //   resolver: zodResolver(newAssigmentDriverSchema),
   // });
 
-  const selectedLine: LineInterface[] = watch("lines");
+  const handleSelectedLineFromChild = (data: LineInterface[] | []) => {
+    setSelectedLine(data);
+  };
 
   if (currentUserRole === UserRolesEnum.supervisor) {
     return null;
@@ -72,7 +76,13 @@ const Assignment = ({ currentUserRole }: AssignmentInterface) => {
             {currentUserRole == UserRolesEnum.conductor ? (
               <>
                 <SecondaryTitle customClass="mb-3 center">Sélectionnez une ligne puis un train</SecondaryTitle>
-                <LinesList register={coordinatorRegister} type="radio" currentUserRole={currentUserRole} />
+                <LinesList
+                  register={coordinatorRegister}
+                  type="radio"
+                  currentUserRole={currentUserRole}
+                  handleSelectedLineFromChild={handleSelectedLineFromChild}
+                />
+                {selectedLine.length == 1 && <p>hello</p>}
               </>
             ) : (
               <>

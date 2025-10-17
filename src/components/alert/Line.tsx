@@ -19,7 +19,7 @@ const Line = ({ lineData, onClick, isSelected, register,type }: LineDataInterfac
           isSelected && "bg-indigo-400 text-gray-900"
         }`}
       >
-        {lineData && lineData.name}  {lineData.trains && lineData.trains}
+        {lineData && lineData.name}
       </label>
       <input
         className="absolute -left-96"

@@ -11,31 +11,35 @@ interface LinesListInterface {
   register: UseFormRegister<any>; // @dev find right type '--'
   type: string; // @dev enum
   currentUserRole: UserRolesEnum;
+  handleSelectedLineFromChild?: (data: LineInterface[] | []) => void;
 }
 
-const LinesList = ({ register, type , currentUserRole}: LinesListInterface) => {
+const LinesList = ({ register, type, currentUserRole, handleSelectedLineFromChild }: LinesListInterface) => {
   const [selectLines, setSelectLines] = useState<LineInterface[]>([]);
   const { isPending, isError, data, error } = useLinesList();
-  console.log(selectLines)
 
   const handleSelectLines = (line: LineInterface) => {
     if (!selectLines.some((item) => item.id === line.id)) {
-      
       if (currentUserRole == UserRolesEnum.coordinator) setSelectLines((prev) => [...prev, line]);
-      else setSelectLines([line]);
+      else {
+        setSelectLines([line])
+        handleSelectedLineFromChild([line])
+      };
     } else {
-      if (currentUserRole == UserRolesEnum.coordinator) setSelectLines((prev) => prev.filter((item) => item.id !== line.id));
-      else setSelectLines([]);
+      if (currentUserRole == UserRolesEnum.coordinator)
+        setSelectLines((prev) => prev.filter((item) => item.id !== line.id));
+      else {setSelectLines([])
+      handleSelectedLineFromChild([])};
     }
   };
   // const handleSelectLines = (line: LineInterface) => {
   //   if (!selectLines.some((item) => item.id === line.id)) {
- // if coordinator setSelectLines((prev) => [...prev, line]);
+  // if coordinator setSelectLines((prev) => [...prev, line]);
   //   else conductor setSelectLines([line]);
   // //   } else {
 
   // //    if coordinator setSelectLines((prev) => prev.filter((item) => item.id !== line.id));
-  //       else conductor 
+  //       else conductor
   //   }
   // };
 
