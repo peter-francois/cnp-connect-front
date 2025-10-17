@@ -1,22 +1,50 @@
+import { useApi } from "../hooks/useApi";
 import { getUsers } from "./user.api";
 
 interface LoginResponceInterface {
-  status: boolean;
-  message: string;
-  authtoken?: string;
-  user?: string;
+  accessToken: string;
+  refreshToken: string;
+}
+const api = useApi();
+
+interface SigninInterface {
+  email: string;
+  password: string;
 }
 
 // ici on envoie pass et email au back qui nous retourn un object avec data{accessToken , refreshToken} et message
-export const signin = async (email: string, password: string): Promise<LoginResponceInterface> => {
-  // axios.post
-  //if (!data) return message: "Connexion refusée"
-  //stockage des tokens dans les cookies
-  const users = await getUsers();
-  const user = users.find((item) => item.email === email);
+// export const signin = async (email: string, password: string): Promise<LoginResponceInterface> => {
+//   // axios.post
+//   //if (!data) return message: "Connexion refusée"
+//   //stockage des tokens dans les cookies
+//   const users = await getUsers();
+//   const user = users.find((item) => item.email === email);
 
-  if (user && user.password == password) {
-    return { status: true, message: "Connexion établie", authtoken: "fake-token", user: user.lastName };
+//   if (user && user.password == password) {
+//     return { status: true, message: "Connexion établie", authtoken: "fake-token", user: user.lastName };
+//   }
+//   return { status: false, message: "Connexion refusée" };
+// };
+export interface AuthResponse {
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+  };
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
+  };
+}
+
+export const signin = async (email: string, password: string): Promise<any> => {
+  const body: SigninInterface = { email, password };
+
+  try {
+    const {data} = await api.post<any>("/auth/signin", body);
+    return data;
+  } catch {
+    throw new Error();
   }
-  return { status: false, message: "Connexion refusée" };
 };
