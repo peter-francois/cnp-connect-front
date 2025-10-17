@@ -23,16 +23,13 @@ const SigninPage = () => {
     mutationFn: ({ email, password }: SigninInterface) => signin(email, password),
     onSuccess: (data) => {
       const tokens = data.data;
+      
       if (tokens.accessToken && tokens.refreshToken) {
         localStorage.setItem("accessToken", tokens.accessToken);
         localStorage.setItem("refreshToken", tokens.refreshToken);
         console.log(data.message);
         navigate("/utilisateurs");
       }
-    },
-
-    onError: (data) => {
-      console.log(data.message);
     },
   });
 

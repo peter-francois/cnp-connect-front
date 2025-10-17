@@ -25,26 +25,31 @@ interface SigninInterface {
 //   }
 //   return { status: false, message: "Connexion refusée" };
 // };
+
 export interface AuthResponse {
-  user: {
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-  };
-  tokens: {
+  // user: {
+  //   id: string;
+  //   email: string;
+  //   firstName: string;
+  //   lastName: string;
+  // };
+  data: {
     accessToken: string;
     refreshToken: string;
   };
+  message: string;
 }
 
-export const signin = async (email: string, password: string): Promise<any> => {
+export const signin = async (email: string, password: string): Promise<AuthResponse> => {
   const body: SigninInterface = { email, password };
 
   try {
-    const {data} = await api.post<any>("/auth/signin", body);
+    const { data } = await api.post<AuthResponse>("/auth/signin", body);
+    console.log(data);
     return data;
-  } catch {
-    throw new Error();
+  } catch (error) {
+    // @dev a voir si c'est ok avec un formateur
+    console.log(error.response.data.message);
+    throw new Error(error.message);
   }
 };
