@@ -23,13 +23,17 @@ const SigninPage = () => {
     mutationFn: ({ email, password }: SigninInterface) => signin(email, password),
     onSuccess: (data) => {
       const tokens = data.data;
-      
+
       if (tokens.accessToken && tokens.refreshToken) {
         localStorage.setItem("accessToken", tokens.accessToken);
         localStorage.setItem("refreshToken", tokens.refreshToken);
         console.log(data.message);
         navigate("/utilisateurs");
       }
+    },
+    // @dev faire une interface pour l'erreur
+    onError: (error) => {
+      console.log("onError", error.response.data.message);
     },
   });
 

@@ -42,14 +42,6 @@ export interface AuthResponse {
 
 export const signin = async (email: string, password: string): Promise<AuthResponse> => {
   const body: SigninInterface = { email, password };
-
-  try {
-    const { data } = await api.post<AuthResponse>("/auth/signin", body);
-    console.log(data);
-    return data;
-  } catch (error) {
-    // @dev a voir si c'est ok avec un formateur
-    console.log(error.response.data.message);
-    throw new Error(error.message);
-  }
+  const { data } = await api.post<AuthResponse>("/auth/signin", body);
+  return data;
 };
