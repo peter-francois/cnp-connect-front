@@ -31,7 +31,8 @@ const SigninPage = () => {
         navigate("/utilisateurs");
       }
     },
-    // @dev faire une interface pour l'erreur
+
+    // @dev voir si la gestion d'erreur avec l'intercepteur de reponse sera suffisant pour gérer tous les cas
     onError: (error) => {
       console.log("onError", error.response.data.message);
     },
@@ -58,6 +59,7 @@ const SigninPage = () => {
             errors={errors}
             icon={<EnvelopeIcon width={20} />}
           />
+
           <div className="mb-5">
             <Input
               id="password"
