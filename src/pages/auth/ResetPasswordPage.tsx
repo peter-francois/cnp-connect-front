@@ -6,16 +6,15 @@ import Input from "../../components/ui/Input";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { useNavigate } from "react-router";
 import { resetPasswordSchema, type UseFormResetPassword } from "../../types/formSchema/resetPasswordSchema";
-import { getUsers } from "../../api/user.api";
 import { useState } from "react";
 import PopUp from "../../components/ui/PopUp";
-import type { UserInterface } from "../../types/interfaces/UserInterface";
+import { useMutation } from "@tanstack/react-query";
+import { forgotPassword } from "../../api/auth.api";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
   const [isValided, setIsValided] = useState(false);
-  const [user, setUser] = useState<UserInterface | null>(null);
-  const token = "1950";
+
   const {
     register,
     handleSubmit,
@@ -26,20 +25,26 @@ const ResetPasswordPage = () => {
 
   const onValidate: SubmitHandler<UseFormResetPassword> = async (data) => {
     // @dev ici on va envoyé en post l'adresse email dans le back,
-    //  on affiche la popup pour l'utilisateur puis tempo 5s et
-    // redirect vers /signin
-    const users = await getUsers();
-    const userByMail = users.find((u) => u.email === data.email);
-    setIsValided(true);
+    createAlertMutation.mutate(data);
+  };
+  const createAlertMutation = useMutation({
+    mutationFn: (data: UseFormResetPassword) => forgotPassword(data.email),
 
-    if (userByMail) {
-      setUser(userByMail);
-      const navigation = () => {
-        navigate("/nouveau-mot-de-passe", { state: { user, token } });
-      };
-      setTimeout(navigation, 4000);
-    }
-    console.log(user);
+    onSuccess: () => {
+      //  on affiche la popup pour l'utilisateur puis tempo 5s et
+      setIsValided(true);
+      // redirect vers /changer-mot-de-passe
+      setTimeout(navigation, 5000);
+    },
+    onError: ()=> {
+      console.error("Erreur pendant l'envoi:");
+    },
+  });
+  
+  
+
+  const navigation = () => {
+    navigate("/nouveau-mot-de-passe");
   };
 
   return (
