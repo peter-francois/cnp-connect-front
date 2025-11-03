@@ -22,13 +22,19 @@ const SigninPage = () => {
   const { isError, isPending, mutate } = useMutation({
     mutationFn: ({ email, password }: SigninInterface) => signin(email, password),
     onSuccess: (data) => {
-      if (data.status && data.authtoken) {
-        localStorage.setItem("token", data.authtoken);
+      const tokens = data.data;
+
+      if (tokens.accessToken && tokens.refreshToken) {
+        localStorage.setItem("accessToken", tokens.accessToken);
+        localStorage.setItem("refreshToken", tokens.refreshToken);
+        console.log(data.message);
         navigate("/utilisateurs");
       }
     },
-    onError: (data) => {
-      console.log(data.message);
+
+    // @dev voir si la gestion d'erreur avec l'intercepteur de reponse sera suffisant pour gérer tous les cas
+    onError: (error) => {
+      console.log("onError", error.response.data.message);
     },
   });
 
@@ -53,6 +59,7 @@ const SigninPage = () => {
             errors={errors}
             icon={<EnvelopeIcon width={20} />}
           />
+
           <div className="mb-5">
             <TextInput
               id="password"
