@@ -8,34 +8,35 @@ import SelectableInput from "../ui/SelectableInput";
 interface LinesListInterface {
   register: UseFormRegister<any>; // @dev find right type '--'
   type: string; // @dev enum
-  currentUserRole?: UserRolesEnum;
   handleSelectedLineFromChild?: (data: LineInterface[] | []) => void | null;
   isAlerts: boolean;
   registerError: FieldErrors;
+  selectedUserRole: UserRolesEnum;
+  authenticateUserRole?: UserRolesEnum;
 }
 
 const LinesList = ({
   register,
   type,
-  currentUserRole,
+  authenticateUserRole,
   handleSelectedLineFromChild,
   isAlerts,
   registerError,
+  selectedUserRole,
 }: LinesListInterface) => {
   const [selectLines, setSelectLines] = useState<LineInterface[]>([]);
   const { isPending, isError, data, error: fetchError } = useLinesList();
-  // const { data: trains } = useTrainsList();
 
   const handleSelectLines = (line: LineInterface) => {
     if (!selectLines.some((item) => item.id === line.id)) {
-      if (currentUserRole != UserRolesEnum.conductor) {
+      if (selectedUserRole != UserRolesEnum.conductor) {
         setSelectLines((prev) => [...prev, line]);
       } else {
         setSelectLines([line]);
         if (handleSelectedLineFromChild) handleSelectedLineFromChild([line]);
       }
     } else {
-      if (currentUserRole != UserRolesEnum.conductor) {
+      if (selectedUserRole != UserRolesEnum.conductor) {
         setSelectLines((prev) => prev.filter((item) => item.id !== line.id));
         if (handleSelectedLineFromChild) handleSelectedLineFromChild([]);
       } else {
@@ -54,7 +55,7 @@ const LinesList = ({
 
   return (
     <>
-      {isAlerts && currentUserRole != UserRolesEnum.conductor && (
+      {isAlerts && authenticateUserRole == UserRolesEnum.conductor && (
         <div className="flex gap-2">
           <button
             type="button"

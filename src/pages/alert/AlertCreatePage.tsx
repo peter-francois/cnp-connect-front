@@ -75,7 +75,7 @@ const AlerCreatetPage = () => {
       <LinesList
         register={register}
         type="checkbox"
-        currentUserRole={currentUserRole}
+        authenticateUserRole={currentUserRole}
         isAlerts={true}
         registerError={errors}
       />

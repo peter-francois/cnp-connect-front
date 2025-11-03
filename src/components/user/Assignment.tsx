@@ -20,13 +20,14 @@ import LinesList from "../ui/LinesList";
 import TrainsList from "../ui/TrainsList";
 
 interface AssignmentInterface {
-  currentUserRole: UserRolesEnum;
+  selectedUserRole: UserRolesEnum;
+  authenticateUserRole: UserRolesEnum;
 }
 
-const Assignment = ({ currentUserRole }: AssignmentInterface) => {
+const Assignment = ({ selectedUserRole, authenticateUserRole }: AssignmentInterface) => {
   const [toggleReassign, setToggleReassign] = useState(false);
   const [selectedLine, setSelectedLine] = useState<LineInterface[]>([]);
-  const isConductor: boolean = currentUserRole === UserRolesEnum.conductor;
+  const isConductor: boolean = selectedUserRole === UserRolesEnum.conductor;
   const {
     register,
     handleSubmit,
@@ -53,9 +54,7 @@ const Assignment = ({ currentUserRole }: AssignmentInterface) => {
     },
   });
 
-  if (currentUserRole === UserRolesEnum.supervisor) {
-    return null;
-  }
+  if (selectedUserRole === UserRolesEnum.supervisor) return null;
 
   return (
     <>
@@ -78,7 +77,8 @@ const Assignment = ({ currentUserRole }: AssignmentInterface) => {
               <LinesList
                 register={register}
                 type={isConductor ? "radio" : "checkbox"}
-                currentUserRole={currentUserRole}
+                authenticateUserRole={authenticateUserRole}
+                selectedUserRole={selectedUserRole}
                 handleSelectedLineFromChild={isConductor ? handleSelectedLineFromChild : () => null}
                 isAlerts={false}
                 registerError={errors}
