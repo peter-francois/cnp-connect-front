@@ -2,13 +2,13 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EnvelopeIcon } from "@heroicons/react/24/outline";
 import PrimaryTitle from "../../components/ui/PrimaryTitle";
-import Input from "../../components/ui/Input";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { resetPasswordSchema, type UseFormResetPassword } from "../../types/formSchema/resetPasswordSchema";
 import { useState } from "react";
 import PopUp from "../../components/ui/PopUp";
 import { useMutation } from "@tanstack/react-query";
-import { forgotPassword } from "../../api/auth.api";
+import TextInput from "../../components/ui/TextInput";
+import {forgotPassword} from "../../api/auth.api";
 
 const ResetPasswordPage = () => {
   const [isValided, setIsValided] = useState(false);
@@ -33,7 +33,6 @@ const ResetPasswordPage = () => {
       setIsValided(true);
       // redirect vers /changer-mot-de-passe
     },
-    
   });
 
   return (
@@ -42,7 +41,7 @@ const ResetPasswordPage = () => {
 
       <form className="authForm" onSubmit={handleSubmit(onValidate)}>
         <div className="card-border relative px-7 py-5">
-          <Input
+          <TextInput
             label="Email"
             id="email"
             type="email"
