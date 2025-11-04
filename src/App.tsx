@@ -16,7 +16,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<DisconnectedLayout />}>
           <Route index element={<SigninPage />} />
-          <Route path="nouveau-mot-de-passe" element={<ResetPasswordPage />} />
+          <Route path="nouveau-mot-de-passe/:token" element={<ResetPasswordPage />} />
           <Route path="reinitialisation-mot-passe" element={<ForgotPasswordPage />} />
         </Route>
         <Route element={<ConnectedLayout />}>

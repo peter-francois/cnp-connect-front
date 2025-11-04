@@ -1,15 +1,16 @@
 import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router";
-
+import { useNavigate, useParams } from "react-router";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import PrimaryTitle from "../../components/ui/PrimaryTitle";
 import { resetPasswordSchema, type UseFormResetPassword } from "../../types/formSchema/resetPasswordSchema";
 import TextInput from "../../components/ui/TextInput";
+import { userService } from "../../services/user.service";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
+  const { token } = useParams<{ token: string }>();
   const {
     register,
     handleSubmit,
@@ -17,9 +18,15 @@ const ResetPasswordPage = () => {
   } = useForm({
     resolver: zodResolver(resetPasswordSchema),
   });
+  const resetPasswordMutation = userService.resetPassword();
 
   const onValidate: SubmitHandler<UseFormResetPassword> = (data) => {
-    if (data.newPassword === data.confirmPassword) navigate("/signin");
+    if (!token) return "Délai expiré";
+
+    resetPasswordMutation.mutate(
+      { token, password: data.newPassword, confirmPassword: data.confirmPassword },
+      { onSuccess: () => navigate("/"), onError: (error) => console.error(error) }
+    );
   };
 
   return (
