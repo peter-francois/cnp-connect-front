@@ -1,8 +1,9 @@
 import type { UserRolesEnum } from "../enum/UserEnum";
-import type { AssignedLineInterface } from "./line/AssignedLineInterface";
-import type { AssignedTrainInterface } from "./train/AssignedTrainInterface";
+import type { AssignedLinesInterface } from "./line/AssignedLineInterface";
+import type { AssignedTrainsInterface } from "./train/AssignedTrainInterface";
 
-export interface UserInterface {
+
+export interface SafeUserInterface {
   id: number;
   email: string;
   firstName: string;
@@ -13,6 +14,12 @@ export interface UserInterface {
   isAvailable: boolean;
   isActif: boolean;
   role: UserRolesEnum;
-  assignedLines?: AssignedLineInterface[];
-  assignedTrains?: AssignedTrainInterface[];
+}
+export interface createUserInterface extends SafeUserInterface {
+  password: string;
+}
+
+export interface SafeUserWithLinesAndTrainsInterface extends SafeUserInterface {
+  assignedLines: AssignedLinesInterface[] | [];
+  assignedTrains: AssignedTrainsInterface[] | [];
 }
