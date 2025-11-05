@@ -5,13 +5,11 @@ import {
   type createUserInterface,
 } from "../types/interfaces/UserInterface";
 import { UserRolesEnum } from "../types/enum/UserEnum";
-
 import type { UseFormAssigmentCoordinator } from "../types/formSchema/newAssigmentCoordinatorSchema";
-import { useApi } from "../hooks/useApi";
-import type { UseFormNewAssigmentDriverSchema } from "../types/formSchema/newAssigmentDriverSchema";
+import { axiosClient } from "../utils/axiosClient";
 
 const url = "/data/user.json";
-const api = useApi();
+const api = axiosClient();
 
 export const getUsers = async (): Promise<SafeUserResponseWithLinesAndTrainsInterface[]> => {
   try {

@@ -1,6 +1,6 @@
 import type { UserRolesEnum } from "../enum/UserEnum";
-import type { AssignedLinesInterface } from "./AssignedLine";
-import type { AssignedTrainsInterface } from "./AssignedTrain";
+import type { AssignedLineInterface } from "./line/AssignedLineInterface";
+import type { AssignedTrainInterface } from "./train/AssignedTrainInterface";
 
 export interface SafeUserInterface {
   id: number;

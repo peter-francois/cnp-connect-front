@@ -1,18 +1,19 @@
-import { useForm, type SubmitHandler } from "react-hook-form";
+import { LockClosedIcon } from "@heroicons/react/24/outline";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EnvelopeIcon } from "@heroicons/react/24/outline";
-import PrimaryTitle from "../../components/ui/PrimaryTitle";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { Link, useNavigate, useParams } from "react-router";
 import PrimaryButton from "../../components/ui/PrimaryButton";
+import PrimaryTitle from "../../components/ui/PrimaryTitle";
 import { resetPasswordSchema, type UseFormResetPassword } from "../../types/formSchema/resetPasswordSchema";
-import { useState } from "react";
-import PopUp from "../../components/ui/PopUp";
-import { useMutation } from "@tanstack/react-query";
 import TextInput from "../../components/ui/TextInput";
-import {forgotPassword} from "../../api/auth.api";
+import { authService } from "../../services/auth.service";
+import PopUp from "../../components/ui/PopUp";
+import { useState } from "react";
 
 const ResetPasswordPage = () => {
-  const [isValided, setIsValided] = useState(false);
-
+  const navigate = useNavigate();
+  const [isPasswordReset, setIsPasswordReset] = useState(false);
+  const { token } = useParams<{ token: string }>();
   const {
     register,
     handleSubmit,
@@ -20,47 +21,62 @@ const ResetPasswordPage = () => {
   } = useForm({
     resolver: zodResolver(resetPasswordSchema),
   });
+  const resetPasswordMutation = authService.resetPassword();
 
-  const onValidate: SubmitHandler<UseFormResetPassword> = async (data) => {
-    // @dev ici on va envoyé en post l'adresse email dans le back,
-    createMutation.mutate(data);
+  const onValidate: SubmitHandler<UseFormResetPassword> = (data) => {
+    if (!token) return;
+
+    resetPasswordMutation.mutate(
+      { token, password: data.newPassword, confirmPassword: data.confirmPassword },
+      {
+        onSuccess: () => {
+          setIsPasswordReset(true);
+          setTimeout(() => navigate("/"), 3000);
+        },
+        onError: (error) => console.error(error),
+      }
+    );
   };
-  const createMutation = useMutation({
-    mutationFn: (data: UseFormResetPassword) => forgotPassword(data.email),
-
-    onSettled: () => {
-      //  on affiche la popup pour l'utilisateur puis tempo 5s et
-      setIsValided(true);
-      // redirect vers /changer-mot-de-passe
-    },
-  });
 
   return (
     <>
-      <PrimaryTitle>Réinitialiser mot de passe</PrimaryTitle>
+      <PrimaryTitle>Changer le mot de passe</PrimaryTitle>
 
       <form className="authForm" onSubmit={handleSubmit(onValidate)}>
-        <div className="card-border relative px-7 py-5">
+        <div className="card-border px-7 py-5">
           <TextInput
-            label="Email"
-            id="email"
-            type="email"
-            placeholder="Veuillez rentrer votre email..."
+            id="newPassword"
+            label="Nouveau mot de passe"
+            type="password"
+            placeholder="Nouveau mot de passe..."
             register={register}
             errors={errors}
-            icon={<EnvelopeIcon width={20} />}
+            icon={<LockClosedIcon width={20} />}
+          />
+
+          <TextInput
+            id="confirmPassword"
+            label="Confirmer mot de passe"
+            type="password"
+            placeholder="Confirmer mot de passe..."
+            register={register}
+            errors={errors}
+            icon={<LockClosedIcon width={20} />}
           />
         </div>
 
-        {isValided && (
-          <PopUp customClass="flex-col">
-            <p className="w-full">
-              Si vous avez un compte, un e-mail de réinitialisation de mot de passe a été envoyé.
-            </p>
+        {isPasswordReset && (
+          <PopUp customClass="bg-green-700/40 border-green-700">
+            <div>
+              <p>Vous allez être redirigé dans 5 secondes ou cliqué sur ce lien.</p>
+              <Link to="/" className="font-bold center mt-5">
+                Cliquez-ici
+              </Link>
+            </div>
           </PopUp>
         )}
 
-        <PrimaryButton type="submit">Envoyer</PrimaryButton>
+        <PrimaryButton type="submit">Confirmer</PrimaryButton>
       </form>
     </>
   );
