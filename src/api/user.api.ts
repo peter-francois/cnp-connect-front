@@ -7,17 +7,15 @@ import {
 import { UserRolesEnum } from "../types/enum/UserEnum";
 import type { UseFormAssigmentCoordinator } from "../types/formSchema/newAssigmentCoordinatorSchema";
 import { axiosClient } from "../utils/axiosClient";
+import type { ResponseInterface } from "../types/interfaces/responseInterface.types";
+import type { UseFormNewAssigmentDriverSchema } from "../types/formSchema/newAssigmentDriverSchema";
 
 const url = "/data/user.json";
 const api = axiosClient();
 
-export const getUsers = async (): Promise<SafeUserWithLinesAndTrainsInterface[]> => {
-  try {
-    const res = await axios.get<SafeUserWithLinesAndTrainsInterface[]>(url);
-    return res.data;
-  } catch {
-    throw new Error("Not found");
-  }
+export const getUsers = async (): Promise<ResponseInterface<SafeUserWithLinesAndTrainsInterface[]>> => {
+  const { data } = await api.get<ResponseInterface<SafeUserWithLinesAndTrainsInterface[]>>("users");
+  return data;
 };
 
 export const getUsersById = async (id: string): Promise<SafeUserWithLinesAndTrainsInterface> => {

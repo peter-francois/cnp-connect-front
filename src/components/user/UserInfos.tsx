@@ -1,4 +1,4 @@
-import type { SafeUserInterface } from "../../types/interfaces/UserInterface";
+import type { SafeUserWithLinesAndTrainsInterface } from "../../types/interfaces/UserInterface";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router";
 import StatusIsConnected from "./StatusIsConnected";
@@ -8,7 +8,7 @@ import UserTrain from "./UserTrain";
 import SecondaryTitle from "../ui/SecondaryTitle";
 
 interface UserPropsInterface {
-  userData: SafeUserInterface;
+  userData: SafeUserWithLinesAndTrainsInterface;
   currentUser: number | undefined;
   setCurrentUser: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
@@ -39,17 +39,20 @@ const UserInfos = ({ userData, currentUser, setCurrentUser }: UserPropsInterface
               <SecondaryTitle>Statut:</SecondaryTitle>
               <StatusIsConnected status={userData.isConnected} />
             </div>
-
-            <div className="flex">
-              <SecondaryTitle>Ligne{userData.lignesId && userData.lignesId.length >= 2 && "s"}:</SecondaryTitle>
-              <UserLines lignesId={userData.lignesId} />
-            </div>
-
-            <div className="flex">
-              <SecondaryTitle>Train:</SecondaryTitle>
-              <UserTrain train={userData.trainsId} />
-            </div>
-
+            {userData.assignedLines!.length > 0 && (
+              <div className="flex">
+                <SecondaryTitle>
+                  Ligne{userData.assignedLines && userData.assignedLines.length >= 2 && "s"}:
+                </SecondaryTitle>
+                <UserLines assignedLines={userData.assignedLines} />
+              </div>
+            )}
+            {userData.assignedTrains!.length > 0 && (
+              <div className="flex">
+                <SecondaryTitle>Train:</SecondaryTitle>
+                <UserTrain assignedTrains={userData.assignedTrains} />
+              </div>
+            )}
             <Link to={`/utilisateurs/${userData.id}`}>
               <EllipsisVerticalIcon width={20} className="text-white" />
             </Link>
