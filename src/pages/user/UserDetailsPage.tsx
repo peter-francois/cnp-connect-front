@@ -5,19 +5,20 @@ import UserField from "../../components/user/UserField";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import Assignment from "../../components/user/Assignment";
 import { UserRolesEnum } from "../../types/enum/UserEnum";
-import { useUserDetails } from "../../hooks/useUserDetails";
-
+import { useUserService } from "../../hooks/useUserService";
 
 const UserDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const authenticateUserRole: UserRolesEnum = UserRolesEnum.SUPERVISOR;
-  const { isPending, isError, data:selectedUser, error } = useUserDetails(String(id));
+  const { findUserDetails } = useUserService();
+  const { isPending, isError, data: selectedUser, error } = findUserDetails(String(id));
 
-  
-  if(!selectedUser) return <p>not users display</p>;
-  const isNotSupervisor = selectedUser?.role !== UserRolesEnum.SUPERVISOR;
+  if (!selectedUser) return <p>not users display</p>;
+
+  const isNotSupervisor = selectedUser.role !== UserRolesEnum.SUPERVISOR;
+
   const frenchRole = () => {
-    switch (selectedUser?.role) {
+    switch (selectedUser.role) {
       case UserRolesEnum.SUPERVISOR:
         return "Superviseur";
 
@@ -41,7 +42,7 @@ const UserDetailsPage = () => {
     // @dev notFound page?? ou ce sera géré avec le useApi?
   }
 
-  return selectedUser ? (
+  return (
     <div className="my-3">
       <section className="flex justify-around items-center gap-8 mb-4">
         <div className="flex flex-col gap-3">
@@ -87,6 +88,7 @@ const UserDetailsPage = () => {
             <UserField label="Statut" value={selectedUser.isConnected ? "Connecté" : "Non connecté"} />
             <StatusIsConnected customClass="mt-7 ml-5" status={selectedUser.isConnected} />
           </div>
+
           <div className="flex gap-10">
             {isNotSupervisor && selectedUser.assignedLines && (
               <UserField
@@ -110,13 +112,9 @@ const UserDetailsPage = () => {
         {authenticateUserRole != UserRolesEnum.DRIVER && (
           <Assignment selectedUserRole={selectedUser.role} authenticateUserRole={authenticateUserRole} />
         )}
-
         <PrimaryButton type="submit">Nouveau message</PrimaryButton>
       </div>
     </div>
-  ) : (
-    // @dev page not found
-    <span>Aucun utilisateur touvé</span>
   );
 };
 

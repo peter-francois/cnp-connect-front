@@ -2,15 +2,16 @@ import { useState } from "react";
 import HeaderUsersPage from "../../components/user/HeaderUsersPage";
 import UserInfos from "../../components/user/UserInfos";
 import PrimaryTitle from "../../components/ui/PrimaryTitle";
-import { userService } from "../../services/user.service";
 import type { SafeUserWithLinesAndTrainsInterface } from "../../types/interfaces/UserInterface";
+import { useUserService } from "../../hooks/useUserService";
 
 const UsersListPage = () => {
   const [search, setSearch] = useState("");
   const [currentUser, setCurrentUser] = useState<number | undefined>(undefined);
-  const { isPending, isError, data, error } = userService.findManyWithLinesAndTrains();
+  const { findManyWithLinesAndTrains } = useUserService();
+  const { isPending, isError, data, error } = findManyWithLinesAndTrains();
 
-  if (!data) return <p>not users display</p>;
+  if (!data) return <p>Aucun d'utilisateurs trouvés.</p>;
 
   const users: SafeUserWithLinesAndTrainsInterface[] = data.data.users;
 
@@ -29,7 +30,6 @@ const UsersListPage = () => {
       user.email?.toLowerCase().includes(search.toLowerCase()) ||
       user.role?.toLowerCase().includes(search.toLowerCase())
   );
-  console.log(filteredUsers);
 
   return (
     <>

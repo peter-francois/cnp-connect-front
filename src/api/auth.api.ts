@@ -22,12 +22,12 @@ export const signin = async (email: string, password: string): Promise<AuthRespo
   return data;
 };
 
-export const forgotPassword = async (email: string): Promise<void> => {
+export const forgotPasswordAuthApi = async (email: string): Promise<void> => {
   const body = { email };
   await api.post("/auth/forgot-password", body);
 };
 
-export const resetPassword = async (
+export const resetPasswordAuthApi = async (
   token: string,
   password: string,
   confirmPassword: string

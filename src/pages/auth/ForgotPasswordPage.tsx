@@ -6,13 +6,11 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import { forgotPasswordSchema, type UseFormForgotPassword } from "../../types/formSchema/forgotPasswordSchema";
 import { useState } from "react";
 import PopUp from "../../components/ui/PopUp";
-import { useMutation } from "@tanstack/react-query";
 import TextInput from "../../components/ui/TextInput";
-import { forgotPassword } from "../../api/auth.api";
+import { useAuthService } from "../../hooks/useAuthService";
 
 const ForgotPasswordPage = () => {
   const [isValided, setIsValided] = useState(false);
-
   const {
     register,
     handleSubmit,
@@ -20,20 +18,22 @@ const ForgotPasswordPage = () => {
   } = useForm({
     resolver: zodResolver(forgotPasswordSchema),
   });
+  const { forgotPassword } = useAuthService();
+  const { mutate } = forgotPassword();
 
   const onValidate: SubmitHandler<UseFormForgotPassword> = async (data) => {
     // @dev ici on va envoyé en post l'adresse email dans le back,
-    createMutation.mutate(data);
+    mutate(
+      { email: data.email },
+      {
+        onSettled: () => {
+          //  on affiche la popup pour l'utilisateur puis tempo 5s et
+          setIsValided(true);
+          // redirect vers /changer-mot-de-passe
+        },
+      }
+    );
   };
-  const createMutation = useMutation({
-    mutationFn: (data: UseFormForgotPassword) => forgotPassword(data.email),
-
-    onSettled: () => {
-      //  on affiche la popup pour l'utilisateur puis tempo 5s et
-      setIsValided(true);
-      // redirect vers /changer-mot-de-passe
-    },
-  });
 
   return (
     <>
