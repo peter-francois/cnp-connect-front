@@ -3,11 +3,16 @@ import HeaderUsersPage from "../../components/user/HeaderUsersPage";
 import UserInfos from "../../components/user/UserInfos";
 import PrimaryTitle from "../../components/ui/PrimaryTitle";
 import { userService } from "../../services/user.service";
+import type { SafeUserWithLinesAndTrainsInterface } from "../../types/interfaces/UserInterface";
 
 const UsersListPage = () => {
   const [search, setSearch] = useState("");
   const [currentUser, setCurrentUser] = useState<number | undefined>(undefined);
   const { isPending, isError, data, error } = userService.findManyWithLinesAndTrains();
+
+  if (!data) return <p>not users display</p>;
+
+  const users: SafeUserWithLinesAndTrainsInterface[] = data.data.users;
 
   if (isPending) {
     return <span>Loading...</span>;
@@ -17,13 +22,14 @@ const UsersListPage = () => {
     return <span>Error: {error.message}</span>;
   }
 
-  const filteredUsers = data.filter(
+  const filteredUsers = users.filter(
     (user) =>
       user.firstName?.toLowerCase().includes(search.toLowerCase()) ||
       user.lastName?.toLowerCase().includes(search.toLowerCase()) ||
       user.email?.toLowerCase().includes(search.toLowerCase()) ||
       user.role?.toLowerCase().includes(search.toLowerCase())
   );
+  console.log(filteredUsers);
 
   return (
     <>
