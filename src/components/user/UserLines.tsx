@@ -1,15 +1,17 @@
+import type { AssignedLinesInterface } from "../../types/interfaces/line/AssignedLineInterface";
+
 interface UserLignInterface {
-  lignesId: number[] | undefined;
+  assignedLines: AssignedLinesInterface[];
 }
 
-const UserLines = ({ lignesId }: UserLignInterface) => {
+const UserLines = ({ assignedLines }: UserLignInterface) => {
   return (
     <>
-      {lignesId && (
+      {assignedLines && (
         <span className="flex">
           <ul className=" px-2 flex gap-2">
-            {lignesId.map((value) => (
-              <li key={value}>{value}</li>
+            {assignedLines.map((assignedLin) => (
+              <li key={assignedLin.line.id}>{assignedLin.line.name}</li>
             ))}
           </ul>
         </span>

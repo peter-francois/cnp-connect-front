@@ -13,8 +13,8 @@ const api = axiosClient();
 
 export const getUsers = async (): Promise<SafeUserWithLinesAndTrainsInterface[]> => {
   try {
-    const res = await axios.get<SafeUserWithLinesAndTrainsInterface[]>(url);
-    return res.data;
+    const res = await api.get<SafeUserWithLinesAndTrainsInterface[]>("users");
+    return res.data.data.users ;
   } catch {
     throw new Error("Not found");
   }

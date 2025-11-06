@@ -7,12 +7,6 @@ import { userService } from "../../services/user.service";
 const UsersListPage = () => {
   const [search, setSearch] = useState("");
   const [currentUser, setCurrentUser] = useState<number | undefined>(undefined);
-
-  // const { isPending, isError, data, error } = useQuery({
-  //   queryKey: ["users"],
-  //   queryFn: getUsers,
-  // });
-
   const { isPending, isError, data, error } = userService.findManyWithLinesAndTrains();
 
   if (isPending) {
