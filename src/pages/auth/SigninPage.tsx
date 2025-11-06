@@ -27,6 +27,7 @@ const SigninPage = () => {
       if (tokens.accessToken && tokens.refreshToken) {
         localStorage.setItem("accessToken", tokens.accessToken);
         localStorage.setItem("refreshToken", tokens.refreshToken);
+        // data.cookie("refreshToken", tokens.refreshToken, { httponly: true });
         console.log(data.message);
         navigate("/utilisateurs");
       }
