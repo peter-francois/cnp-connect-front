@@ -59,7 +59,7 @@ export const axiosClient = () => {
           );
 
           localStorage.setItem("accessToken", data.data.accessToken);
-          // localStorage.setItem("refreshToken", data.data.refreshToken);
+          localStorage.setItem("refreshToken", data.data.refreshToken);
           console.log(data.cookie);
           data.cookie("refreshToken", data.data.refreshToken, { httponly: true });
         } catch {
