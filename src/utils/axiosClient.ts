@@ -1,5 +1,6 @@
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import axios, { HttpStatusCode } from "axios";
+import Cookies from "js-cookie";
 
 interface AxiosRequestWithRetry extends AxiosRequestConfig {
   _retry: boolean;
@@ -13,6 +14,7 @@ export const axiosClient = () => {
 
   const api: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
+    withCredentials: true,
     headers,
   });
 
@@ -40,28 +42,21 @@ export const axiosClient = () => {
       originalRequest._retry = true;
 
       if (error.response?.status === HttpStatusCode.Unauthorized) {
-        const refreshToken = localStorage.getItem("refreshToken");
-        console.log(error);
+        const refreshToken = Cookies.get("refreshToken");
 
-        if (!refreshToken) {
+        if (!refreshToken && originalRequest.url == "/auth/refresh-token") {
           localStorage.clear();
           window.location.href = "/";
         }
-        console.log(document);
 
         try {
           const { data } = await axios.post(
             `${import.meta.env.VITE_API_BASE_URL}/auth/refresh-token`,
             {},
-            {
-              headers: { Authorization: `Bearer ${refreshToken}` },
-            }
+            { withCredentials: true, headers: { Authorization: refreshToken } }
           );
 
           localStorage.setItem("accessToken", data.data.accessToken);
-          localStorage.setItem("refreshToken", data.data.refreshToken);
-          console.log(data.cookie);
-          data.cookie("refreshToken", data.data.refreshToken, { httponly: true });
         } catch {
           localStorage.clear();
           window.location.href = "/";
