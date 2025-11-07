@@ -62,8 +62,6 @@ export const axiosClient = () => {
           window.location.href = "/";
         }
 
-        //document.cookie = `refreshToken= ${data.data.refreshToken}; expires=Thu, 18 Dec 2013 12:00:00 UTC`
-
         return api(originalRequest);
       }
       window.location.href = "/page-erreur";
