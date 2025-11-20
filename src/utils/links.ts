@@ -7,7 +7,7 @@ export const links: LinkInterface[] = [
   },
   {
     name: "Changer de mot de passe",
-    path: "/nouveau-mot-de-passe",
+    path: "/reinitialisation-mot-passe",
   },
   {
     name: "Voir tous les utilisateurs",

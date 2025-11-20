@@ -2,7 +2,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Route, Routes } from "react-router";
 import ConnectedLayout from "./layouts/ConnectedLayout";
 import DisconnectedLayout from "./layouts/DisconnectedLayout";
-import AlerCreatetPage from "./pages/alert/AlertCreatePage";
+import AlertCreatePage from "./pages/alert/AlertCreatePage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import SigninPage from "./pages/auth/SigninPage";
@@ -22,7 +22,7 @@ const App = () => {
         <Route element={<ConnectedLayout />}>
           <Route path="/utilisateurs" element={<UsersListPage />} />
           <Route path="/utilisateurs/:id" element={<UserDetailsPage />} />
-          <Route path="/nouvelle-alert" element={<AlerCreatetPage />} />
+          <Route path="/nouvelle-alerte" element={<AlertCreatePage />} />
           <Route path="/nouvel-utilisateur" element={<UserCreatePage />} />
         </Route>
       </Routes>
