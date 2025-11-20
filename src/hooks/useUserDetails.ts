@@ -1,7 +1,8 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, type UseQueryResult } from "@tanstack/react-query";
 import { getUsersById } from "../api/user.api";
+import type { SafeUserWithLinesAndTrainsInterface } from "../types/interfaces/UserInterface";
 
-export const useUserDetails = (id: string) => {
+export const useUserDetails = (id: string): UseQueryResult<SafeUserWithLinesAndTrainsInterface> => {
   return useQuery({
     queryKey: [`user${id}`],
     queryFn: () => getUsersById(id),
