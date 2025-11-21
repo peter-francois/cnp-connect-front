@@ -6,9 +6,9 @@ import PrimaryButton from "../../components/ui/PrimaryButton";
 import PrimaryTitle from "../../components/ui/PrimaryTitle";
 import { resetPasswordSchema, type UseFormResetPassword } from "../../types/formSchema/resetPasswordSchema";
 import TextInput from "../../components/ui/TextInput";
-import { authService } from "../../services/auth.service";
 import PopUp from "../../components/ui/PopUp";
 import { useState } from "react";
+import { useAuthService } from "../../hooks/useAuthService";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
@@ -21,12 +21,13 @@ const ResetPasswordPage = () => {
   } = useForm({
     resolver: zodResolver(resetPasswordSchema),
   });
-  const resetPasswordMutation = authService.resetPassword();
+  const { resetPassword } = useAuthService();
+  const { mutate } = resetPassword();
 
   const onValidate: SubmitHandler<UseFormResetPassword> = (data) => {
     if (!token) return;
 
-    resetPasswordMutation.mutate(
+    mutate(
       { token, password: data.newPassword, confirmPassword: data.confirmPassword },
       {
         onSuccess: () => {

@@ -1,6 +1,5 @@
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import axios, { HttpStatusCode } from "axios";
-import Cookies from "js-cookie";
 
 interface AxiosRequestWithRetry extends AxiosRequestConfig {
   _retry: boolean | undefined;
@@ -49,7 +48,6 @@ export const axiosClient = () => {
       originalRequest._retry = true;
 
       if (error.response?.status === HttpStatusCode.Unauthorized) {
-
         try {
           const { data } = await axios.post(
             `${import.meta.env.VITE_API_BASE_URL}/auth/refresh-token`,
