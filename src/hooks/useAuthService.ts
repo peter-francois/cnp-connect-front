@@ -5,21 +5,21 @@ import type { UseFormForgotPassword } from "../types/formSchema/forgotPasswordSc
 import type { SigninInterface } from "../types/interfaces/auth/SignInterface";
 
 export const useAuthService = () => {
-  const resetPassword = () =>
+  const ResetPassword = () =>
     useMutation({
       mutationFn: ({ token, password, confirmPassword }: ResetPasswordInterface) =>
         resetPasswordAuthApi(token, password, confirmPassword),
     });
 
-  const forgotPassword = () =>
+  const ForgotPassword = () =>
     useMutation({
       mutationFn: (data: UseFormForgotPassword) => forgotPasswordAuthApi(data.email),
     });
 
-  const signin = () =>
+  const Signin = () =>
     useMutation({
       mutationFn: ({ email, password }: SigninInterface) => signinApi(email, password),
     });
 
-  return { resetPassword, forgotPassword, signin };
+  return { resetPassword: ResetPassword, forgotPassword: ForgotPassword, signin: Signin };
 };
