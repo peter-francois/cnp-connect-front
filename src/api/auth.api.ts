@@ -15,7 +15,7 @@ export interface AuthResponse {
   message: string;
 }
 
-export const signin = async (email: string, password: string): Promise<AuthResponse> => {
+export const signinApi = async (email: string, password: string): Promise<AuthResponse> => {
   const body: SigninInterface = { email, password };
   const { data } = await api.post<AuthResponse>("/auth/signin", body);
   return data;
