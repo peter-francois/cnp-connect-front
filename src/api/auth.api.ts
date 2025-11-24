@@ -42,6 +42,6 @@ export const resetPasswordAuthApi = async (
 };
 
 export const meApi = async (): Promise<SafeUserInterface> => {
-  const res = await api.get("/auth/me");
-  return res.data.data.user;
+  const { data } = await api.get("/auth/me");
+  return data.data.user;
 };

@@ -11,9 +11,7 @@ import type { SafeUserInterface } from "../../types/interfaces/UserInterface";
 
 const UserDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
-
   const me: SafeUserInterface | undefined = queryClient.getQueryData(["me"]);
-
   const { findUserDetails } = useUserService();
   const { isPending, isError, data: selectedUser, error } = findUserDetails(String(id));
 
