@@ -8,7 +8,7 @@ const SignoutPage = () => {
   useEffect(() => {
     const handleSignout = async (): Promise<void> => {
       await signoutApi();
-      localStorage.removeItem("accessToken");
+      localStorage.clear()
       navigate("/");
     };
     handleSignout();

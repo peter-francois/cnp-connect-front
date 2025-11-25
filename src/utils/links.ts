@@ -43,10 +43,5 @@ export const menuLinks: LinkInterface = {
       path: "/deconnexion",
       allowedRoles: ALL_ROLES,
     },
-    signout: {
-      name: "Déconnexion",
-      path: "/deconnexion",
-      
-      },
   },
 };
