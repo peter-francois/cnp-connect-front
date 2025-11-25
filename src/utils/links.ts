@@ -1,4 +1,3 @@
-import { signoutApi } from "../api/auth.api";
 import type { LinkInterface } from "../types/interfaces/linkInterfaces.types";
 
 export const appLinks: LinkInterface = {
