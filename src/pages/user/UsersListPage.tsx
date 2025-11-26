@@ -23,6 +23,7 @@ const UsersListPage = () => {
     return <span>Error: {error.message}</span>;
   }
 
+  //@dev see with limit ?
   const filteredUsers = users.filter(
     (user) =>
       user.firstName?.toLowerCase().includes(search.toLowerCase()) ||
