@@ -1,6 +1,10 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import type { LinkInterface } from "../../types/interfaces/linkInterfaces.types";
 import ItemLink from "./ItemLink";
+import PrimaryButton from "../ui/PrimaryButton";
+import { useAuthService } from "../../hooks/useAuthService";
+import { useNavigate } from "react-router";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface MenuComponentInterface {
   links: LinkInterface;
@@ -12,6 +16,22 @@ interface MenuComponentInterface {
 const Menu = ({ links, isOpen, menuRef, setIsOpen }: MenuComponentInterface) => {
   const closeMenu = () => {
     setIsOpen(false);
+  };
+  const navigate = useNavigate();
+  const { signout } = useAuthService();
+  const { mutate, isPending } = signout();
+  const queryClient = useQueryClient();
+
+  const handleSignout = () => {
+    mutate(undefined, {
+      onSuccess: () => {
+        localStorage.clear();
+        queryClient.clear();
+
+        navigate("/");
+      },
+      onError: (error) => console.log(error),
+    });
   };
 
   return (
@@ -26,17 +46,25 @@ const Menu = ({ links, isOpen, menuRef, setIsOpen }: MenuComponentInterface) => 
             <h2>Menu</h2>
             <XMarkIcon width={30} className="bg-red-600 hover:bg-red-900 rounded-full" onClick={closeMenu} />
           </div>
-          <nav>
-            <ul className="flex flex-col gap-5 px-5">
-              {Object.entries(links.items).map(([key, item]) => {
-                return (
-                  <ItemLink link={item.path} allowedRolesLink={item.allowedRoles} key={key} handleOnClick={closeMenu}>
-                    {item.name}
-                  </ItemLink>
-                );
-              })}
-            </ul>
-          </nav>
+
+          <div className="flex flex-col justify-between h-5/6">
+            <nav>
+              <ul className="flex flex-col gap-5 px-5">
+                {Object.entries(links.items).map(([key, item]) => {
+                  return (
+                    <ItemLink link={item.path} allowedRolesLink={item.allowedRoles} key={key} handleOnClick={closeMenu}>
+                      {item.name}
+                    </ItemLink>
+                  );
+                })}
+              </ul>
+            </nav>
+
+            {isPending && <p className="text-center">Déconnexion en cours...</p>}
+            <PrimaryButton type="button" customClass="mx-9" handleOnCLick={handleSignout}>
+              Se déconneter
+            </PrimaryButton>
+          </div>
         </div>
       )}
     </>
