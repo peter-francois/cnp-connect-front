@@ -38,10 +38,5 @@ export const menuLinks: LinkInterface = {
       path: "/nouvel-utilisateur",
       allowedRoles: [UserRolesEnum.SUPERVISOR],
     },
-    signout: {
-      name: "Déconnexion",
-      path: "/deconnexion",
-      allowedRoles: ALL_ROLES,
-    },
   },
 };

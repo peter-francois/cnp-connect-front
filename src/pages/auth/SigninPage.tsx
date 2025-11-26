@@ -32,7 +32,6 @@ const SigninPage = () => {
 
           if (tokens.accessToken) {
             localStorage.setItem("accessToken", tokens.accessToken);
-            console.log(data.message);
             navigate("/utilisateurs");
           }
         },
