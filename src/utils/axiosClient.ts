@@ -62,8 +62,16 @@ export const axiosClient = () => {
 
         return api(originalRequest);
       }
-      // @dev don't send if conflict
-      window.location.href = "/page-erreur";
+
+      if (error.response?.status === HttpStatusCode.NotFound) {
+        window.location.href = "/page-erreur-404";
+      }
+
+      if (error.response?.status >= 500 || error.code === "ERR_NETWORK") {
+        window.location.href = "/page-erreur-500";
+      }
+
+      return Promise.reject(error);
     }
   );
 
