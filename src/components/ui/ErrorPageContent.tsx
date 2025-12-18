@@ -14,7 +14,7 @@ const ErrorPageContent = ({ children }: PropsInterface) => {
         <p>{children}</p>
       </div>
 
-      <Link to="/" className="text-indigo-500 underline">
+      <Link to="/" className="text-indigo-500 underline hover:text-indigo-600">
         Retouner à la connexion
       </Link>
     </div>
