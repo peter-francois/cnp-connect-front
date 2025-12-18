@@ -10,9 +10,13 @@ import type { AlertInterface } from "../../types/interfaces/AlertInterface";
 import { addAlert } from "../../api/alert.api";
 import { UserRolesEnum } from "../../types/enum/UserEnum";
 import LinesList from "../../components/ui/LinesList";
+import { useUserService } from "../../hooks/useUserService";
 
 const AlertCreatePage = () => {
   const navigate = useNavigate();
+  const { findUserDetails } = useUserService();
+  console.log(`🚀 ~ :18 ~ AlertCreatePage ~ findUserDetails:`, findUserDetails)
+  
   const currentUserRole: UserRolesEnum = UserRolesEnum.DRIVER;
   const {
     register,
