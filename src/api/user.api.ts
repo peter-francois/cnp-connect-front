@@ -21,7 +21,7 @@ export const getUsersByIdApi = async (id: string): Promise<SafeUserWithLinesAndT
 export const updateUserByIdApi = async (
   dataToUpdate: Partial<SafeUserInterface>
 ): Promise<ResponseInterface<SafeUserInterface>> => {
-  const { data } = await api.patch<ResponseInterface<SafeUserInterface>>(`/users/${dataToUpdate.id}`);
+  const { data } = await api.patch<ResponseInterface<SafeUserInterface>>(`/api/users/${dataToUpdate.id}`);
   return data;
 };
 
