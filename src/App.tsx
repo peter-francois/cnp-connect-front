@@ -23,12 +23,12 @@ const App = () => {
           <Route index element={<SigninPage />} />
           <Route path={`${appLinks.items.resetPassword.path}/:token`} element={<ResetPasswordPage />} />
           <Route path={appLinks.items.forgotPassword.path} element={<ForgotPasswordPage />} />
-          <Route path="/chat" element={<ChatWebSocket />} />
           <Route path="/page-erreur" element={<ErrorPage />} />
         </Route>
 
         <Route element={<ConnectedLayout />}>
           <Route element={<ProtectedRoute />}>
+            <Route path="/chat" element={<ChatWebSocket />} />
             <Route path={menuLinks.items.users.path} element={<UsersListPage />} />
             <Route path={`${menuLinks.items.users.path}/:id`} element={<UserDetailsPage />} />
             <Route path={menuLinks.items.newAlert.path} element={<AlertCreatePage />} />

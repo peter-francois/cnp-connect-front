@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { io, Socket } from "socket.io-client";
+import { Socket } from "socket.io-client";
 import PrimaryButton from "../../components/ui/PrimaryButton";
 import { queryClient } from "../../utils/queryClient";
 import type { SafeUserInterface } from "../../types/interfaces/UserInterface";
 import { socketIoClient } from "../../utils/socketIoClient";
+import { v4 as uuid } from "uuid";
 
 interface Message {
   id?: string;
@@ -13,12 +14,16 @@ interface Message {
   timestamp?: string;
 }
 
+interface WelcomePayload {
+  username: string;
+}
+
 const ConversationDetailsPage = () => {
   const webSocket: Socket | null = socketIoClient();
   const me = queryClient.getQueryData<SafeUserInterface>(["me"]);
   const socketRef = useRef<Socket | null>(null);
 
-  const [message, setMessage] = useState<string>("");
+  const [messageInput, setMessageInput] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
 
   const conversationId = "yfcgvuhb"; // Id de la conversation
@@ -30,43 +35,67 @@ const ConversationDetailsPage = () => {
   }, [messages]);
 
   useEffect(() => {
-    // Connexion Socket.IO avec token auth
-    socketRef.current = webSocket;
-    if (socketRef.current) {
-      socketRef.current.on("connect", () => {
-        console.log("✅ Connected socketIO");
+    if (!webSocket || !me) return;
 
-        // Rejoindre la conversation
-        socketRef.current?.emit("joinConversation", conversationId);
-      });
-      // Écouter les messages de la conversation
-      socketRef.current.on("message", (data: Message) => {
-        if (data.conversationId === conversationId) {
-          setMessages((prev) => [...prev, data]);
-        }
-      });
+    socketRef.current = webSocket;
+    const socket = socketRef.current;
+
+    const onConnect = () => {
+      console.log("test")
+      socket.emit("joinConversation", conversationId);
+    };
+
+    const onMessage = (data: Message) => {
+      if (data.conversationId === conversationId) {
+        setMessages((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data]));
+      }
+    };
+
+    const onWelcome = (data: WelcomePayload) => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: uuid(),
+          conversationId,
+          content: `Bienvenue ${data.username} 👋`,
+          senderId: "system",
+          timestamp: new Date().toISOString(),
+        },
+      ]);
+    };
+
+    if (socket.connected) {
+      onConnect();
+    } else {
+      socket.on("connect", onConnect);
     }
 
+    socket.on("message", onMessage);
+    socket.on("welcome", onWelcome);
+
     return () => {
-      socketRef.current?.disconnect();
+      socket.off("connect", onConnect);
+      socket.off("message", onMessage);
+      socket.off("welcome", onWelcome);
     };
-  }, [conversationId, webSocket]);
+  }, [conversationId, me, webSocket]);
 
   const sendMessage = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!message.trim() || !me) return;
+    if (!messageInput.trim() || !me) return;
 
     const msg: Message = {
+      id: uuid(),
       conversationId,
-      content: message,
+      content: messageInput,
       senderId: me.id,
       timestamp: new Date().toISOString(),
     };
 
     socketRef.current?.emit("message", msg);
     setMessages((prev) => [...prev, msg]); // Afficher immédiatement côté front
-    setMessage("");
+    setMessageInput("");
   };
 
   return (
@@ -74,8 +103,14 @@ const ConversationDetailsPage = () => {
       <ul className="list-none m-0 p-0 mb-14">
         {messages.map((msg) => (
           <li
-            key={msg.timestamp + msg.senderId}
-            className={`px-4 py-2 ${msg.senderId === me?.id ? "bg-blue-500 text-white" : "bg-gray-100 text-black"}`}
+            key={msg.id}
+            className={`px-4 py-2 text-sm italic ${
+              msg.senderId === "system"
+                ? "text-gray-500 text-center"
+                : msg.senderId === me?.id
+                ? "bg-blue-500 text-white"
+                : "bg-gray-100 text-black"
+            }`}
           >
             {msg.content}
           </li>
@@ -87,8 +122,8 @@ const ConversationDetailsPage = () => {
         <input
           className="flex-grow px-4 rounded-full m-1 focus:outline-none"
           type="text"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          value={messageInput}
+          onChange={(e) => setMessageInput(e.target.value)}
           placeholder="Votre message..."
         />
         <PrimaryButton type="submit">Send</PrimaryButton>
