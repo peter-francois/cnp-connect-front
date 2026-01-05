@@ -36,8 +36,7 @@ const AlertCreatePage = () => {
 
   return (
     <form
-      onSubmit={handleSubmit(onValidate, () => {
-      })}
+      onSubmit={handleSubmit(onValidate, () => {})}
       aria-labelledby="alert-form-title"
       aria-describedby="alert-form-description"
     >
