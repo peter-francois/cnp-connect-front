@@ -8,10 +8,12 @@ import Priority from "../../components/alert/Priority";
 import { PriorityEnum, UserRolesEnum } from "../../types/enum/UserEnum";
 import LinesList from "../../components/ui/LinesList";
 import { useAlertService } from "../../hooks/useAlertService";
+import type { SafeUserInterface } from "../../types/interfaces/UserInterface";
+import { queryClient } from "../../utils/queryClient";
 
 const AlertCreatePage = () => {
   const navigate = useNavigate();
-  const currentUserRole: UserRolesEnum = UserRolesEnum.DRIVER;
+  const me: SafeUserInterface | undefined = queryClient.getQueryData(["me"]);
   const {
     register,
     handleSubmit,
@@ -25,11 +27,14 @@ const AlertCreatePage = () => {
   const { newAlert } = useAlertService();
   const { mutate } = newAlert();
 
+  if (!me) return null;
+  const currentUserRole: UserRolesEnum = me.role;
+
   //submit and form validate = use createAlertMutation with data
   const onValidate: SubmitHandler<UseFormNewAlert> = (data): void => {
     mutate(data, {
       onSuccess: () => {
-      
+        navigate("/utilisateurs");
       },
     });
   };
@@ -47,7 +52,6 @@ const AlertCreatePage = () => {
       <p id="alert-form-description" className="sr-only">
         Formulaire permettant de créer une alerte avec priorité et lignes concernées
       </p>
-    
 
       <Textarea
         id="content"
@@ -55,7 +59,7 @@ const AlertCreatePage = () => {
         register={register}
         errors={errors}
         rows={5}
-        textAreaCustomClass="px-5 py-3"
+        textAreaCustomClass="px-5 py-3 outline-indigo-600"
       />
 
       <fieldset>

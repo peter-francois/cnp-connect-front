@@ -64,16 +64,16 @@ const LinesList = ({
 
   return (
     <>
-      {isAlerts && authenticateUserRole == UserRolesEnum.DRIVER && (
+      {isAlerts && authenticateUserRole != UserRolesEnum.DRIVER && (
         // @dev créé un boutton selectAll générique
         <div className="flex gap-2">
           <button
             type="button"
-            className="border border-indigo-600 cursor-pointer rounded-2xl py-2 px-3 my-3 text-center hover:bg-indigo-400 hover:text-gray-900 active:text-gray-900 active:bg-indigo-400"
+            className="border border-indigo-600 cursor-pointer rounded-lg py-2 px-3 my-3 text-center hover:bg-indigo-400 hover:text-gray-900 active:text-gray-900 active:bg-indigo-400"
             onClick={() =>
-              selectLines.length === data?.assignedLines.length
-                ? setSelectLines([])
-                : setSelectLines(data?.assignedLines.map((al) => al.line))
+              setSelectLines(
+                selectLines.length === data?.assignedLines.length ? [] : data?.assignedLines.map((al) => al.line)
+              )
             }
           >
             {selectLines.length === data?.assignedLines.length ? "Tout désélectionner" : "Tout sélectionner"}
