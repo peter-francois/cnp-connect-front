@@ -7,7 +7,7 @@ import { socketIoClient } from "../../utils/socketIoClient";
 import { v4 as uuid } from "uuid";
 
 interface Message {
-  id?: string;
+  id: string;
   conversationId: string;
   content: string;
   senderId: string;
@@ -41,7 +41,6 @@ const ConversationDetailsPage = () => {
     const socket = socketRef.current;
 
     const onConnect = () => {
-      console.log("test")
       socket.emit("joinConversation", conversationId);
     };
 
