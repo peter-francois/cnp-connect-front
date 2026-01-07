@@ -7,14 +7,15 @@ import { socketIoClient } from "../../utils/socketIoClient";
 import { v4 as uuid } from "uuid";
 
 interface Message {
-  id: string;
-  conversationId: string;
-  content: string;
+  messageId: string;
+  type: string;
   senderId: string;
-  timestamp?: string;
+  content: string;
+  timestamp: string;
 }
 
 interface WelcomePayload {
+  type: string;
   username: string;
 }
 
@@ -45,17 +46,17 @@ const ConversationDetailsPage = () => {
     };
 
     const onMessage = (data: Message) => {
-      if (data.conversationId === conversationId) {
-        setMessages((prev) => (prev.some((m) => m.id === data.id) ? prev : [...prev, data]));
-      }
+      // if (data.conversationId === conversationId) {
+      setMessages((prev) => (prev.some((m) => m.messageId === data.messageId) ? prev : [...prev, data]));
+      // }
     };
 
     const onWelcome = (data: WelcomePayload) => {
       setMessages((prev) => [
         ...prev,
         {
-          id: uuid(),
-          conversationId,
+          messageId: uuid(),
+          type: "welcome",
           content: `Bienvenue ${data.username} 👋`,
           senderId: "system",
           timestamp: new Date().toISOString(),
@@ -85,8 +86,8 @@ const ConversationDetailsPage = () => {
     if (!messageInput.trim() || !me) return;
 
     const msg: Message = {
-      id: uuid(),
-      conversationId,
+      messageId: uuid(),
+      type: "message",
       content: messageInput,
       senderId: me.id,
       timestamp: new Date().toISOString(),
@@ -101,7 +102,7 @@ const ConversationDetailsPage = () => {
       <ul className="list-none m-0 p-0 mb-14">
         {messages.map((msg) => (
           <li
-            key={msg.id}
+            key={msg.messageId}
             className={`px-4 py-2 text-sm italic ${
               msg.senderId === "system"
                 ? "text-gray-500 text-center"
