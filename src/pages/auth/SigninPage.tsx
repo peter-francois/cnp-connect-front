@@ -29,11 +29,11 @@ const SigninPage = () => {
       { email, password },
       {
         onSuccess: async (data) => {
-          const tokens = data.data;
+          const {accessToken, userSigninResponse} = data.data;
 
-          if (tokens.accessToken) {
-            localStorage.setItem("accessToken", tokens.accessToken);
-            await queryClient.invalidateQueries({ queryKey: ["me"] });
+          if (accessToken) {
+            localStorage.setItem("accessToken", accessToken);
+            queryClient.setQueryData(["me"], userSigninResponse);
             navigate("/utilisateurs");
           }
         },

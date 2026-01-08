@@ -9,16 +9,17 @@ interface SigninInterface {
   password: string;
 }
 
-export interface AuthResponse {
+interface AuthResponseInterface {
   data: {
     accessToken: string;
+    userSigninResponse: SafeUserInterface;
   };
   message: string;
 }
 
-export const signinApi = async (email: string, password: string): Promise<AuthResponse> => {
+export const signinApi = async (email: string, password: string): Promise<AuthResponseInterface> => {
   const body: SigninInterface = { email, password };
-  const { data } = await api.post<AuthResponse>("/api/auth/signin", body);
+  const { data } = await api.post<AuthResponseInterface>("/api/auth/signin", body);
   return data;
 };
 

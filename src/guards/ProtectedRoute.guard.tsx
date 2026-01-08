@@ -1,15 +1,10 @@
 import { Navigate, Outlet } from "react-router";
-import { useAuthService } from "../hooks/useAuthService";
 
 const ProtectedRoute = () => {
-  const { me } = useAuthService();
-  const { isError, isLoading, data: user } = me();
+  const accessToken = localStorage.getItem("accessToken");
 
-  if (isLoading) return null;
+  if (!accessToken) return <Navigate to="/" replace />;
 
-  if (isError || !user) {
-    return <Navigate to="/" replace />;
-  }
   return <Outlet />;
 };
 
