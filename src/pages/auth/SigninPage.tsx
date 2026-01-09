@@ -36,7 +36,10 @@ const SigninPage = () => {
           }
         },
         onError: (error) => {
-          if (error instanceof AxiosError) console.log("onError", error.response?.data.message);
+          if (error instanceof AxiosError) {
+            console.log("onError if response", error.response?.data.message);
+            console.log("onError", error);
+          }
         },
       }
     );

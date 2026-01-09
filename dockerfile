@@ -1,11 +1,13 @@
 FROM node:24-alpine AS builder
 
 WORKDIR /app
-
+ARG VITE_API_BASE_URL
 COPY package*.json .
 RUN npm ci --omit=dev
-
 COPY . .
+ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
+
+RUN echo "BASE API URL: $VITE_API_BASE_URL"
 RUN npm run build
 
 FROM nginx:1.28-alpine

@@ -12,10 +12,13 @@ export const axiosClient = () => {
   };
 
   const api: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || "",
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     withCredentials: true,
     headers,
   });
+  console.log("🚀 ~ :16 ~ axiosClient ~ import.meta.env.VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
+  console.log("api.baseUrl", api.defaults.baseURL);
+  // console.log("api.baseUrl", api.defaults);
 
   // interceptors for request to add accessToken if it exist in local storage
   api.interceptors.request.use((config) => {
@@ -62,13 +65,13 @@ export const axiosClient = () => {
         return api(originalRequest);
       }
 
-      if (error.response?.status === HttpStatusCode.NotFound) {
-        window.location.href = "/page-erreur-404";
-      }
+      // if (error.response?.status === HttpStatusCode.NotFound) {
+      //   window.location.href = "/page-erreur-404";
+      // }
 
-      if (error.response?.status === HttpStatusCode.InternalServerError || error.code === "ERR_NETWORK") {
-        window.location.href = "/page-erreur-500";
-      }
+      // if (error.response?.status === HttpStatusCode.InternalServerError || error.code === "ERR_NETWORK") {
+      //   window.location.href = "/page-erreur-500";
+      // }
 
       return Promise.reject(error);
     }
