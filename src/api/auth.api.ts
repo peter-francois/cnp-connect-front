@@ -18,12 +18,12 @@ interface AuthResponseInterface {
 
 export const signinApi = async (email: string, password: string): Promise<AuthResponseInterface> => {
   const body: SigninInterface = { email, password };
-  const { data } = await api.post<AuthResponseInterface>("/api/auth/signin", body);
+  const { data } = await api.post<AuthResponseInterface>("/auth/signin", body);
   return data;
 };
 
 export const signoutApi = async (): Promise<void> => {
-  await api.post("/api/auth/signout");
+  await api.post("/auth/signout");
 };
 
 export const resetPasswordAuthApi = async (
@@ -31,7 +31,7 @@ export const resetPasswordAuthApi = async (
   password: string,
   confirmPassword: string
 ): Promise<ResponseInterfaceMessage> => {
-  const res = await api.post<ResponseInterfaceMessage>("/api/auth/reset-password", {
+  const res = await api.post<ResponseInterfaceMessage>("/auth/reset-password", {
     token,
     password,
     confirmPassword,
@@ -42,10 +42,10 @@ export const resetPasswordAuthApi = async (
 
 export const forgotPasswordAuthApi = async (email: string): Promise<void> => {
   const body = { email };
-  await api.post("/api/auth/forgot-password", body);
+  await api.post("/auth/forgot-password", body);
 };
 
 export const meApi = async (): Promise<SafeUserInterface> => {
-  const { data } = await api.get("/api/auth/me");
+  const { data } = await api.get("/auth/me");
   return data.data.user;
 };

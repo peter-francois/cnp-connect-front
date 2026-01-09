@@ -16,9 +16,6 @@ export const axiosClient = () => {
     withCredentials: true,
     headers,
   });
-  console.log("🚀 ~ :16 ~ axiosClient ~ import.meta.env.VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
-  console.log("api.baseUrl", api.defaults.baseURL);
-  // console.log("api.baseUrl", api.defaults);
 
   // interceptors for request to add accessToken if it exist in local storage
   api.interceptors.request.use((config) => {
@@ -51,7 +48,7 @@ export const axiosClient = () => {
       if (error.response?.status === HttpStatusCode.Unauthorized) {
         try {
           const { data } = await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL || ""}/api/auth/refresh-token`,
+            `${import.meta.env.VITE_API_BASE_URL || ""}/auth/refresh-token`,
             {},
             { withCredentials: true }
           );
