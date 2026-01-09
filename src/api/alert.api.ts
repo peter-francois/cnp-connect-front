@@ -6,6 +6,6 @@ import { axiosClient } from "../utils/axiosClient";
 const api = axiosClient();
 
 export const addAlertApi = async (body: UseFormNewAlert): Promise<ResponseInterface<AlertInterface>> => {
-  const { data } = await api.post<ResponseInterface<AlertInterface>>("/api/alerts", body);
+  const { data } = await api.post<ResponseInterface<AlertInterface>>("/alerts", body);
   return data;
 };
