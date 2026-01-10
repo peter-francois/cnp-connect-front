@@ -6,6 +6,7 @@ export const useAlertService = () => {
   const NewAlert = () =>
     useMutation({
       mutationFn: (data: AlertInterface) => addAlertApi(data),
+      
     });
 
     return { newAlert: NewAlert };

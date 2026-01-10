@@ -1,7 +1,7 @@
 import { useForm, type SubmitHandler } from "react-hook-form";
 import Textarea from "../../components/ui/Textarea";
 import PrimaryButton from "../../components/ui/PrimaryButton";
-import { useNavigate } from "react-router";
+import { data, useNavigate } from "react-router";
 import { type UseFormNewAlert, newAlertSchema } from "../../types/formSchema/newAlertSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Priority from "../../components/alert/Priority";
@@ -10,6 +10,7 @@ import LinesList from "../../components/ui/LinesList";
 import { useAlertService } from "../../hooks/useAlertService";
 import type { SafeUserInterface } from "../../types/interfaces/UserInterface";
 import { queryClient } from "../../utils/queryClient";
+import { useEffect } from "react";
 
 const AlertCreatePage = () => {
   const navigate = useNavigate();
@@ -26,12 +27,17 @@ const AlertCreatePage = () => {
   // @dev mettre un store zustand pour le texte de l'alerte
   const { newAlert } = useAlertService();
   const { mutate } = newAlert();
-
+  useEffect(() => {
+    const subscription = watch((value) => console.log("Form values:", value));
+    return () => subscription.unsubscribe();
+  }, [watch]);
   if (!me) return null;
   const currentUserRole: UserRolesEnum = me.role;
 
+
   //submit and form validate = use createAlertMutation with data
   const onValidate: SubmitHandler<UseFormNewAlert> = (data): void => {
+   
     mutate(data, {
       onSuccess: () => {
         navigate("/utilisateurs");

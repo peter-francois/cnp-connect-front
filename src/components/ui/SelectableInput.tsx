@@ -9,6 +9,7 @@ interface SelectableInputInterface {
   isSelected: boolean;
   register: UseFormRegister<FieldValues>;
   type: string;
+
   customClass?: string;
 }
 
