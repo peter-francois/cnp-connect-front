@@ -76,7 +76,7 @@ const LinesList = ({
           </button>
         </div>
       )}
-
+      
       <div className="card-border justify-around relative flex flex-wrap gap-y-7 gap-x-2 p-5">
         {/* Driver : ligne auto-sélectionnée */}
         {isDriver && driverLine && (
@@ -85,8 +85,8 @@ const LinesList = ({
             label="linesIds"
             data={driverLine}
             onClick={() => {}}
-            isSelected
-            register={register }
+            isSelected={selectLines.some((item) => item.id === driverLine.id)}
+            register={register}
             type={type}
             customClass="opacity-70 cursor-not-allowed"
           />
