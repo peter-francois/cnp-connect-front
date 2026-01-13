@@ -39,6 +39,6 @@ export const forgotPasswordAuthApi = async (email: string): Promise<void> => {
 };
 
 export const meApi = async (): Promise<SafeUserInterface> => {
-  const { data } = await api.get("/api/auth/me");
+  const { data } = await api.get("/auth/me");
   return data.data.user;
 };
