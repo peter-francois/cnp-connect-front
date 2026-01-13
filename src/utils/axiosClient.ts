@@ -12,7 +12,7 @@ export const axiosClient = () => {
   };
 
   const api: AxiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || "",
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     withCredentials: true,
     headers,
   });
@@ -20,7 +20,6 @@ export const axiosClient = () => {
   // interceptors for request to add accessToken if it exist in local storage
   api.interceptors.request.use((config) => {
     const token = localStorage.getItem("accessToken");
-
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -63,13 +62,13 @@ export const axiosClient = () => {
         return api(originalRequest);
       }
 
-      if (error.response?.status === HttpStatusCode.NotFound) {
-        window.location.href = "/page-erreur-404";
-      }
+      // if (error.response?.status === HttpStatusCode.NotFound) {
+      //   window.location.href = "/page-erreur-404";
+      // }
 
-      if (error.response?.status === HttpStatusCode.InternalServerError || error.code === "ERR_NETWORK") {
-        window.location.href = "/page-erreur-500";
-      }
+      // if (error.response?.status === HttpStatusCode.InternalServerError || error.code === "ERR_NETWORK") {
+      //   window.location.href = "/page-erreur-500";
+      // }
 
       return Promise.reject(error);
     }

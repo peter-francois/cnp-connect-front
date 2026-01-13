@@ -1,4 +1,4 @@
-import type { ResponseInterfaceMessage } from "../types/interfaces/responseInterface.types";
+import type { ResponseInterface, ResponseInterfaceMessage } from "../types/interfaces/responseInterface.types";
 import type { SafeUserInterface } from "../types/interfaces/UserInterface";
 import { axiosClient } from "../utils/axiosClient";
 
@@ -9,21 +9,14 @@ interface SigninInterface {
   password: string;
 }
 
-export interface AuthResponse {
-  data: {
-    accessToken: string;
-  };
-  message: string;
-}
-
-export const signinApi = async (email: string, password: string): Promise<AuthResponse> => {
+export const signinApi = async (email: string, password: string): Promise<ResponseInterface<string>> => {
   const body: SigninInterface = { email, password };
-  const { data } = await api.post<AuthResponse>("/api/auth/signin", body);
+  const { data } = await api.post<ResponseInterface<string>>("/auth/signin", body);
   return data;
 };
 
 export const signoutApi = async (): Promise<void> => {
-  await api.post("/api/auth/signout");
+  await api.post("/auth/signout");
 };
 
 export const resetPasswordAuthApi = async (
@@ -31,7 +24,7 @@ export const resetPasswordAuthApi = async (
   password: string,
   confirmPassword: string
 ): Promise<ResponseInterfaceMessage> => {
-  const res = await api.post<ResponseInterfaceMessage>("/api/auth/reset-password", {
+  const res = await api.post<ResponseInterfaceMessage>("/auth/reset-password", {
     token,
     password,
     confirmPassword,
@@ -42,10 +35,10 @@ export const resetPasswordAuthApi = async (
 
 export const forgotPasswordAuthApi = async (email: string): Promise<void> => {
   const body = { email };
-  await api.post("/api/auth/forgot-password", body);
+  await api.post("/auth/forgot-password", body);
 };
 
 export const meApi = async (): Promise<SafeUserInterface> => {
   const { data } = await api.get("/api/auth/me");
-  return data.data.safeUser;
+  return data.data.user;
 };

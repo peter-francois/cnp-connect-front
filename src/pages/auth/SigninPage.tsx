@@ -27,16 +27,15 @@ const SigninPage = () => {
     mutate(
       { email, password },
       {
-        onSuccess: (data) => {
-          const tokens = data.data;
-
-          if (tokens.accessToken) {
-            localStorage.setItem("accessToken", tokens.accessToken);
+        onSuccess: async (data) => {
+          const accessToken = data.data.accessToken
+          if (accessToken) {
+            localStorage.setItem("accessToken", accessToken);
             navigate("/utilisateurs");
           }
         },
         onError: (error) => {
-          if (error instanceof AxiosError) console.log("onError", error.response?.data.message);
+          if (error instanceof AxiosError) console.log("onError", error);
         },
       }
     );
