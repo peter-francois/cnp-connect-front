@@ -25,16 +25,14 @@ export const updateUserByIdApi = async (
   return data;
 };
 
-// export const assigneLineOrTrainToUser = async (
-//   data: UseFormNewAssigmentDriverSchema | UseFormAssigmentCoordinator
-// ): Promise<SafeUserInterface> => {
-//   try {
-//     const user = await axios.patch<SafeUserInterface>(url, data);
-//     return user;
-//   } catch {
-//     throw new Error("Not found");
-//   }
-// };
+export const updateAssigmentApi = async (
+  dataToUpdate: SafeUserWithLinesAndTrainsInterface
+): Promise<ResponseInterface<SafeUserWithLinesAndTrainsInterface>> => {
+  const { data } = await api.patch<ResponseInterface<SafeUserWithLinesAndTrainsInterface>>(
+    `/users/${dataToUpdate.id}/assignment`
+  );
+  return data
+};
 
 export const addUserApi = async (body: CreateUserRequestInterface): Promise<ResponseInterface<SafeUserInterface>> => {
   const { data } = await api.post<ResponseInterface<SafeUserInterface>>("/users", body);

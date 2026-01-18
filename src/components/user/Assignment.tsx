@@ -17,6 +17,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import LinesList from "../ui/LinesList";
 import TrainsList from "../ui/TrainsList";
+import { useUserService } from "../../hooks/useUserService";
 
 interface AssignmentInterface {
   selectedUserRole: UserRolesEnum;
@@ -24,8 +25,6 @@ interface AssignmentInterface {
 }
 
 const Assignment = ({ selectedUserRole, authenticateUserRole }: AssignmentInterface) => {
-  // const navigate = useNavigate();
-  // const links = menuLinks;
   const [toggleReassign, setToggleReassign] = useState(false);
   const [selectedLine, setSelectedLine] = useState<LineInterface[]>([]);
   const isDriver: boolean = selectedUserRole === UserRolesEnum.DRIVER;
@@ -37,23 +36,6 @@ const Assignment = ({ selectedUserRole, authenticateUserRole }: AssignmentInterf
   } = useForm({
     resolver: zodResolver(isDriver ? newAssigmentDriverSchema : newAssigmentCoordinatorSchema),
   });
-
-  // const { assigneLineOrTrainToUser } = useUserService();
-  // const { mutate, isError, isPending } = assigneLineOrTrainToUser();
-  // const sendDataToBack: SubmitHandler<UseFormAssigmentCoordinator | UseFormNewAssigmentDriverSchema> = (
-  //   data: UseFormAssigmentCoordinator | UseFormNewAssigmentDriverSchema
-  // ) => {
-  //   mutate(data as Partial<SafeUserWithLinesAndTrainsInterface>, {
-  //     onSuccess: () => {
-  //       console.log("Utilisateur modifié");
-  //       navigate(links.items.users.path);
-  //     },
-  //     onError: () => {
-  //       console.log("Erreur lors de la modification d'un utilisateur");
-  //       navigate(links.items.users.path);
-  //     },
-  //   });
-  // };
 
   const onValidate: SubmitHandler<UseFormAssigmentCoordinator | UseFormNewAssigmentDriverSchema> = (data) => {
     assignment.mutate(data);

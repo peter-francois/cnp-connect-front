@@ -1,22 +1,19 @@
-import { useState } from "react";
-import HeaderUsersPage from "../../components/user/HeaderUsersPage";
-import UserInfos from "../../components/user/UserInfos";
 import PrimaryTitle from "../../components/ui/PrimaryTitle";
-import type { SafeUserWithLinesAndTrainsInterface } from "../../types/interfaces/UserInterface";
+
 
 const ConversationsListPage = () => {
 
-  if (!data) return <p>Aucune conversation trouvé.</p>;
+  // if (!data) return <p>Aucune conversation trouvé.</p>;
 
 
 
-  if (isPending) {
-    return <span>Loading...</span>;
-  }
+  // if (isPending) {
+  //   return <span>Loading...</span>;
+  // }
 
-  if (isError) {
-    return <span>Error: {error.message}</span>;
-  }
+  // if (isError) {
+  //   return <span>Error: {error.message}</span>;
+  // }
 
 
 
@@ -31,7 +28,7 @@ const ConversationsListPage = () => {
         </div>
 
         <ul>
-            {conversations.map<ConversationInfos/>}
+            {/* {conversations.map<ConversationInfos/>} */}
         </ul>
       </section>
     </>

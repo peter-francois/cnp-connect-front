@@ -14,7 +14,8 @@ import ProtectedRoute from "./guards/ProtectedRoute.guard";
 import SupervisorRoute from "./guards/SupervisorRoute.guard";
 import ErrorPage500 from "./pages/error/ErrorPage500";
 import ErrorPage404 from "./pages/error/ErrorPage404";
-import ChatWebSocket from "./pages/conversation/ConversationDetailsPage";
+import ConversationDetailsPage from "./pages/conversation/ConversationDetailsPage";
+import ConversationsListPage from "./pages/conversation/ConversationsListPage";
 
 const App = () => {
   return (
@@ -24,14 +25,13 @@ const App = () => {
           <Route index element={<SigninPage />} />
           <Route path={`${appLinks.items.resetPassword.path}/:token`} element={<ResetPasswordPage />} />
           <Route path={appLinks.items.forgotPassword.path} element={<ForgotPasswordPage />} />
-          <Route path="/page-erreur-404" element={<ErrorPage404 />} />
-          <Route path="/page-erreur-500" element={<ErrorPage500 />} />
+          <Route path={appLinks.items.notfound.path} element={<ErrorPage404 />} />
+          <Route path={appLinks.items.serverError.path} element={<ErrorPage500 />} />
           <Route path="*" element={<ErrorPage404 />} />
         </Route>
 
         <Route element={<ConnectedLayout />}>
           <Route element={<ProtectedRoute />}>
-            <Route path="/chat" element={<ChatWebSocket />} />
             <Route path={menuLinks.items.users.path} element={<UsersListPage />} />
             <Route path={`${menuLinks.items.users.path}/:id`} element={<UserDetailsPage />} />
             <Route path={menuLinks.items.newAlert.path} element={<AlertCreatePage />} />

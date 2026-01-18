@@ -1,5 +1,6 @@
 import type { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import axios, { HttpStatusCode } from "axios";
+import { appLinks } from "./links";
 
 interface AxiosRequestWithRetry extends AxiosRequestConfig {
   _retry: boolean | undefined;
@@ -39,7 +40,7 @@ export const axiosClient = () => {
 
       // prevent infinit loops with refresh token
       if (originalRequest._retry) {
-        // you don't have access to this ressource
+        // user don't have access to this ressource
         return Promise.reject(error);
       }
 
@@ -62,13 +63,13 @@ export const axiosClient = () => {
         return api(originalRequest);
       }
 
-      // if (error.response?.status === HttpStatusCode.NotFound) {
-      //   window.location.href = "/page-erreur-404";
-      // }
+      if (error.response?.status === HttpStatusCode.NotFound) {
+        window.location.href = appLinks.items.notfound.path;
+      }
 
-      // if (error.response?.status === HttpStatusCode.InternalServerError || error.code === "ERR_NETWORK") {
-      //   window.location.href = "/page-erreur-500";
-      // }
+      if (error.response?.status === HttpStatusCode.InternalServerError || error.code === "ERR_NETWORK") {
+        window.location.href = appLinks.items.serverError.path;
+      }
 
       return Promise.reject(error);
     }

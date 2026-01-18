@@ -13,6 +13,14 @@ export const appLinks: LinkInterface = {
       name: "Mot de passe oublié",
       path: "/reinitialisation-mot-passe",
     },
+    notFound: {
+      name: "Page non trouvée",
+      path: "/page-erreur-404",
+    },
+    serverError: {
+      name: "Erreur interne du serveur",
+      path: "/page-erreur-500",
+    },
   },
 };
 
