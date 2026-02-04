@@ -22,7 +22,7 @@ Une configuration Nginx est également fournie et pensée pour fonctionner conjo
 
 Elle permet de servir le build du frontend via un serveur Nginx minimal, afin d’obtenir une image Docker plus légère et performante.
 
-🚀 CI/CD (GitLab)
+🔃 CI/CD (GitLab)
 
 Le projet intègre une pipeline GitLab CI/CD (.gitlab-ci.yml) permettant le build automatique de l’application et son déploiement dans un container registry (GitLab).
 
@@ -111,6 +111,16 @@ src/
 │   └── axiosClient.ts
 
 ```
+
+---
+## ⚙️Configuration
+Un fichier .env.example est fourni à la racine du projet. Il sert de modèle de configuration et liste les variables d’environnement nécessaires au bon fonctionnement du frontend.  
+
+Pour l’utiliser :  
+```bash
+cp .env.example .env
+```  
+Puis renseigner les valeurs adaptées à ton environnement.
 
 ---
 
